@@ -17,11 +17,13 @@ import { PlatformFS } from "./fs-provider";
 import { isPlatformUri } from "./util";
 import { CodelensProvider } from "./codelens";
 import { refreshAuditReport } from "./audit";
+import { ReportWebView } from "../audit/report";
 
 export async function activate(
   context: vscode.ExtensionContext,
   auditContext: AuditContext,
-  cache: Cache
+  cache: Cache,
+  reportWebView: ReportWebView
 ) {
   const platformUrl = configuration.get<string>("platformUrl");
 
@@ -100,7 +102,8 @@ export async function activate(
     importedUrls,
     cache,
     provider,
-    tree
+    tree,
+    reportWebView
   );
 
   vscode.languages.registerCodeLensProvider(

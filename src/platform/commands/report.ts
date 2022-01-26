@@ -12,7 +12,8 @@ export default (
   store: PlatformStore,
   context: vscode.ExtensionContext,
   auditContext: AuditContext,
-  cache: Cache
+  cache: Cache,
+  reportWebView: ReportWebView
 ) => ({
   openAuditReport: async (apiId: string) => {
     await vscode.window.withProgress<void>(
@@ -28,7 +29,7 @@ export default (
           const audit = await refreshAuditReport(store, cache, auditContext, document);
           if (audit) {
             const articles = await getArticles();
-            ReportWebView.show(context.extensionPath, articles, audit, cache);
+            reportWebView.show(context.extensionPath, articles, audit, cache);
           }
         } catch (e) {
           vscode.window.showErrorMessage(`Unexpected error: ${e}`);
