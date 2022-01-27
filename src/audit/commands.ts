@@ -8,7 +8,7 @@ import { audit, getArticles, requestToken } from "./client";
 import { setDecorations, updateDecorations } from "./decoration";
 import { updateDiagnostics } from "./diagnostic";
 
-import { ReportWebView } from "./report";
+import { AuditReportWebView } from "./report";
 
 import { AuditContext, Audit, PendingAudits } from "../types";
 
@@ -21,7 +21,7 @@ export function registerSecurityAudit(
   cache: Cache,
   auditContext: AuditContext,
   pendingAudits: PendingAudits,
-  reportWebView: ReportWebView
+  reportWebView: AuditReportWebView
 ) {
   return vscode.commands.registerTextEditorCommand(
     "openapi.securityAudit",
@@ -44,7 +44,7 @@ export function registerSecurityAudit(
           updateDecorations(auditContext.decorations, audit.summary.documentUri, audit.issues);
           updateDiagnostics(auditContext.diagnostics, audit.filename, audit.issues);
           setDecorations(textEditor, auditContext);
-          reportWebView.show(context.extensionPath, articles, audit, cache);
+          reportWebView.show(context.extensionPath, articles, audit);
         }
         delete pendingAudits[uri];
       } catch (e) {
@@ -59,14 +59,14 @@ export function registerFocusSecurityAudit(
   context: vscode.ExtensionContext,
   cache: Cache,
   auditContext: AuditContext,
-  reportWebView: ReportWebView
+  reportWebView: AuditReportWebView
 ) {
   return vscode.commands.registerCommand("openapi.focusSecurityAudit", async (documentUri) => {
     try {
       const audit = auditContext.auditsByMainDocument[documentUri];
       if (audit) {
         const articles = await getArticles();
-        reportWebView.show(context.extensionPath, articles, audit, cache);
+        reportWebView.show(context.extensionPath, articles, audit);
       }
     } catch (e) {
       vscode.window.showErrorMessage(`Unexpected error: ${e}`);
@@ -77,7 +77,7 @@ export function registerFocusSecurityAudit(
 export function registerFocusSecurityAuditById(
   context: vscode.ExtensionContext,
   auditContext: AuditContext,
-  reportWebView: ReportWebView
+  reportWebView: AuditReportWebView
 ) {
   return vscode.commands.registerTextEditorCommand(
     "openapi.focusSecurityAuditById",

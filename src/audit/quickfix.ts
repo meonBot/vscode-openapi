@@ -24,7 +24,7 @@ import {
 } from "../types";
 import { updateDiagnostics } from "./diagnostic";
 import { updateDecorations, setDecorations } from "./decoration";
-import { ReportWebView } from "./report";
+import { AuditReportWebView } from "./report";
 import {
   deleteJsonNode,
   deleteYamlNode,
@@ -298,7 +298,7 @@ export function updateReport(
   issues: Issue[],
   auditContext: AuditContext,
   cache: Cache,
-  reportWebView: ReportWebView
+  reportWebView: AuditReportWebView
 ): void {
   const document = editor.document;
   const uri = document.uri.toString();
@@ -340,7 +340,7 @@ export function registerQuickfixes(
   context: vscode.ExtensionContext,
   cache: Cache,
   auditContext: AuditContext,
-  reportWebView: ReportWebView
+  reportWebView: AuditReportWebView
 ) {
   vscode.commands.registerTextEditorCommand(
     "openapi.simpleQuickFix",

@@ -5,18 +5,17 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
-import { Cache } from "../cache";
 import { Audit } from "../types";
 import { readFileSync } from "fs";
 
-export class ReportWebView {
+export class AuditReportWebView {
   private panel?: vscode.WebviewPanel;
   private style: string;
   private script: vscode.Uri;
 
   constructor(extensionPath: string) {
     this.script = vscode.Uri.file(
-      path.join(extensionPath, "webview", "generated", "audit", "audit.es.js")
+      path.join(extensionPath, "webview", "generated", "audit", "index.js")
     );
 
     this.style = readFileSync(
@@ -25,7 +24,7 @@ export class ReportWebView {
     );
   }
 
-  public show(extensionPath: string, kdb: any, audit: Audit, cache: Cache) {
+  public show(extensionPath: string, kdb: any, audit: Audit) {
     if (!this.panel) {
       this.panel = this.createPanel(kdb);
     }
@@ -47,22 +46,32 @@ export class ReportWebView {
 
   private createPanel(kdb: any): vscode.WebviewPanel {
     const panel = vscode.window.createWebviewPanel(
-      "foo",
-      "API Security Audit",
+      "security-audit-report",
+      "Security Audit Report",
       {
         viewColumn: vscode.ViewColumn.Two,
         preserveFocus: true,
       },
       {
         enableScripts: true,
+        retainContextWhenHidden: true,
       }
     );
 
-    const cspSource = panel.webview.cspSource;
-    const style = this.style;
-    const script = panel.webview.asWebviewUri(this.script);
+    panel.webview.html = this.getHtml(
+      panel.webview.cspSource,
+      kdb,
+      panel.webview.asWebviewUri(this.script),
+      this.style
+    );
 
-    panel.webview.html = `<!DOCTYPE html>
+    panel.onDidDispose(() => (this.panel = undefined));
+
+    return panel;
+  }
+
+  private getHtml(cspSource: string, kdb: any, script: vscode.Uri, style: string): string {
+    return `<!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
@@ -102,7 +111,5 @@ export class ReportWebView {
     </script>
     </body>
     </html>`;
-
-    return panel;
   }
 }
