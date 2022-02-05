@@ -34,6 +34,7 @@ export interface ReportedIssue {
 }
 
 export interface Issue extends ReportedIssue {
+  key: string;
   lineNo: number;
   documentUri: string;
 }
@@ -42,8 +43,15 @@ export interface IssuesByDocument {
   [uri: string]: Issue[];
 }
 
+export interface FilesMap {
+  [uri: string]: {
+    relative: string;
+  };
+}
+
 export interface Audit {
   filename: string;
+  files: FilesMap;
   summary: Summary;
   issues: IssuesByDocument;
 }

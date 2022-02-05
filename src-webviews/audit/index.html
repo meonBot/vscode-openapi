@@ -14,8 +14,9 @@
       window.addEventListener("DOMContentLoaded", (event) => {
         console.log("DOM fully loaded and parsed");
         const kdb = JSON.parse(document.getElementById("kdb").textContent);
+        window.renderAuditReport(kdb);
         const audit = JSON.parse(document.getElementById("audit").textContent);
-        window.renderAuditReport(kdb, audit, null, null);
+        window.postMessage({ command: "show", report: audit });
       });
     </script>
     <script type="application/json" id="audit">
@@ -29,6 +30,11 @@
           "invalid": false,
           "documentUri": "file:///Users/anton/crunch/oas-samples/Pixi_2.0.json",
           "subdocumentUris": []
+        },
+        "files": {
+          "file:///Users/anton/crunch/oas-samples/Pixi_2.0.json": {
+            "relative": "Pixi_2.0.json"
+          }
         },
         "issues": {
           "file:///Users/anton/crunch/oas-samples/Pixi_2.0.json": [

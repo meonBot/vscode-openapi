@@ -1,6 +1,10 @@
-import { SummaryData } from "../types";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { useState } from "react";
 
-export default function Summary({ summary }: { summary: SummaryData }) {
+export default function Summary() {
+  const summary = useSelector((state: RootState) => state.report.summary);
+
   return (
     <div className="c_roundedbox">
       <h1>

@@ -11,8 +11,13 @@
     <script>
       window.addEventListener("DOMContentLoaded", (event) => {
         console.log("DOM fully loaded and parsed");
+        const vscode = {
+          postMessage(message) {
+            console.log("message to host app:", message);
+          },
+        };
         const scan = JSON.parse(document.getElementById("scan").textContent);
-        window.renderScanReport(scan);
+        window.renderScanReport(vscode, scan);
       });
     </script>
     <script type="application/json" id="scan">

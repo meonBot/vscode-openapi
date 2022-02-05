@@ -1,15 +1,22 @@
 import Article from "./Article";
-import { Issue as IssueType } from "../types";
-import chevronUp from "./chevron-up.svg";
-import chevronDown from "./chevron-down.svg";
+import { FilesMap, Issue as IssueType } from "../types";
+import chevronUp from "./icons/chevron-up.svg";
+import chevronDown from "./icons/chevron-down.svg";
 import { useState } from "react";
 
-export default function Issue({ kdb, issue }: { kdb: any; issue: IssueType }) {
+export default function Issue({
+  kdb,
+  issue,
+  filename,
+}: {
+  kdb: any;
+  issue: IssueType;
+  filename: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
   const scoreImpact = issue.displayScore !== "0" ? `Score impact: ${issue.displayScore}` : "";
-  const filename = issue.documentUri;
   const lang =
     filename.toLowerCase().endsWith(".yaml") || filename.toLowerCase().endsWith("yml")
       ? "yaml"

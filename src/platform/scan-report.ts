@@ -52,6 +52,15 @@ export class ScanReportWebView {
 
     panel.onDidDispose(() => (this.panel = undefined));
 
+    panel.webview.onDidReceiveMessage((message: any) => {
+      switch (message.command) {
+        case "curl":
+          console.log("run curl", message.curl);
+          vscode.commands.executeCommand("openapi.platform.runCurl", message.curl);
+          break;
+      }
+    });
+
     return panel;
   }
 
@@ -75,12 +84,13 @@ export class ScanReportWebView {
     <script>
     window.addEventListener("DOMContentLoaded", (event) => {
       console.log('content loaded');
+      const vscode = acquireVsCodeApi();
       window.addEventListener('message', event => {
         console.log('got message', event);
         const message = event.data;
               switch (message.command) {
                   case 'show':
-                      window.renderScanReport(message.report);
+                      window.renderScanReport(vscode, message.report);
                       break;
               }
       });

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./bootstrap.min.css";
 import App from "./components/App";
 import "./style.css";
-import { Issue } from "./types";
+import { HostApplication, Issue } from "./types";
 
 function getIssues(report: any): Issue[] {
   const results: Issue[] = [];
@@ -28,12 +28,12 @@ function getIssues(report: any): Issue[] {
   return results;
 }
 
-function renderScanReport(report: any) {
+function renderScanReport(host: HostApplication, report: any) {
   const issues = getIssues(report);
   console.log("issues", issues);
   ReactDOM.render(
     <React.StrictMode>
-      <App issues={issues} />
+      <App host={host} issues={issues} />
     </React.StrictMode>,
     document.getElementById("root")
   );
