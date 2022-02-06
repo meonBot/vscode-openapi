@@ -2,8 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link href="bootstrap.min.css" rel="stylesheet" />
-    <link href="style.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Security Audit Report</title>
   </head>
@@ -14,9 +12,11 @@
       window.addEventListener("DOMContentLoaded", (event) => {
         console.log("DOM fully loaded and parsed");
         const kdb = JSON.parse(document.getElementById("kdb").textContent);
-        window.renderAuditReport(kdb);
+        const host = { postMessage: (message) => console.log("pm", message) };
+        window.renderAuditReport(host, kdb);
         const audit = JSON.parse(document.getElementById("audit").textContent);
-        window.postMessage({ command: "show", report: audit });
+        window.postMessage({ command: "showFullReport", report: audit });
+        //window.postMessage({ command: "showNoReport" });
       });
     </script>
     <script type="application/json" id="audit">

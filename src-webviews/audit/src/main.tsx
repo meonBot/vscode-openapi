@@ -4,16 +4,17 @@ import { Provider } from "react-redux";
 
 import { initStore } from "./store";
 
-import { show, showIds } from "./reportSlice";
+import { showFullReport, showPartialReport, showNoReport } from "./reportSlice";
 
 import App from "./components/App";
 
 import "./bootstrap.min.css";
 import "./style.css";
 import { KdbState } from "./kdbSlice";
+import { HostApplication } from "./types";
 
-function renderAuditReport(kdb: KdbState) {
-  const store = initStore(kdb);
+function renderAuditReport(host: HostApplication, kdb: KdbState) {
+  const store = initStore(host, kdb);
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
@@ -26,12 +27,16 @@ function renderAuditReport(kdb: KdbState) {
   window.addEventListener("message", (event) => {
     const message = event.data;
     switch (message.command) {
-      case "show":
-        console.log("got show command");
-        store.dispatch(show(message.report));
+      case "showFullReport":
+        store.dispatch(showFullReport(message.report));
         break;
-      case "showIds":
-        store.dispatch(showIds({ report: message.report, ids: message.ids, uri: message.uri }));
+      case "showPartialReport":
+        store.dispatch(
+          showPartialReport({ report: message.report, ids: message.ids, uri: message.uri })
+        );
+        break;
+      case "showNoReport":
+        store.dispatch(showNoReport());
         break;
     }
   });

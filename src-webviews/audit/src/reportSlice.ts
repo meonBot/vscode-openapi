@@ -2,13 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Summary, Issue, Audit } from "./types";
 
 export interface ReportState {
+  display: "full" | "partial" | "no-report";
   summary: Summary;
-  full: boolean;
   all: Issue[];
   selected: Issue[];
 }
 
 const initialState: ReportState = {
+  display: "no-report",
   summary: {
     documentUri: "",
     subdocumentUris: [],
@@ -19,27 +20,18 @@ const initialState: ReportState = {
     security: { max: 0, value: 0 },
     oasconformance: { max: 0, value: 0 },
   },
-  full: true,
   all: [],
-  selected: [
-    {
-      id: "operation-securityrequirement-emptyarray",
-      description: "The security section of the operation 'post' contains an empty array",
-      pointer: "/paths/~1api~1login/post/security",
-      score: 3.75,
-      displayScore: "4",
-      criticality: 4,
-      documentUri: "file:///Users/anton/crunch/oas-samples/Pixi_2.0.json",
-      lineNo: 125,
-      key: "file:///Users/anton/crunch/oas-samples/Pixi_2.0.json-0",
-    },
-  ],
+  selected: [],
 };
 
 function flattenIssues(audit: Audit): Issue[] {
   const issues = Object.entries(audit.issues)
     .map(([uri, issues]) => {
-      return issues.map((issue, idx) => ({ ...issue, key: `${uri}-${idx}` }));
+      return issues.map((issue, idx) => ({
+        ...issue,
+        key: `${uri}-${idx}`,
+        filename: audit.files[issue.documentUri].relative,
+      }));
     })
     .reduce((acc: any, val) => acc.concat(val), []);
   return issues;
@@ -49,23 +41,31 @@ export const reportSlice = createSlice({
   name: "report",
   initialState,
   reducers: {
-    show: (state, action: PayloadAction<any>) => {
+    showFullReport: (state, action: PayloadAction<any>) => {
       console.log("do show", action);
+      state.display = "full";
       state.all = state.selected = flattenIssues(action.payload);
-      state.full = true;
     },
-    showIds: (state, action: PayloadAction<{ report: any; uri: string; ids: string[] }>) => {
+    showPartialReport: (
+      state,
+      action: PayloadAction<{ report: any; uri: string; ids: string[] }>
+    ) => {
       console.log("do show ids", action.payload.report);
       const issues = flattenIssues(action.payload.report);
       const ids = action.payload.ids.map((id) => `${action.payload.uri}-${id}`);
+      state.display = "partial";
       state.all = issues;
       state.selected = issues.filter((issue) => ids.includes(issue.key));
-      state.full = false;
+    },
+    showNoReport: (state) => {
+      state.display = "no-report";
+      state.all = [];
+      state.selected = [];
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { show, showIds } = reportSlice.actions;
+export const { showFullReport, showPartialReport, showNoReport } = reportSlice.actions;
 
 export default reportSlice.reducer;

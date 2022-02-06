@@ -37,6 +37,7 @@ export interface Issue extends ReportedIssue {
   key: string;
   lineNo: number;
   documentUri: string;
+  filename: string;
 }
 
 export interface IssuesByDocument {
@@ -54,4 +55,8 @@ export interface Audit {
   files: FilesMap;
   summary: Summary;
   issues: IssuesByDocument;
+}
+
+export interface HostApplication {
+  postMessage(message: any): void;
 }

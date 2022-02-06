@@ -7,18 +7,20 @@ import { useState } from "react";
 export default function Issue({
   kdb,
   issue,
-  filename,
+  goToLine,
+  copyIssueId,
 }: {
   kdb: any;
   issue: IssueType;
-  filename: string;
+  goToLine: any;
+  copyIssueId: any;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
   const scoreImpact = issue.displayScore !== "0" ? `Score impact: ${issue.displayScore}` : "";
   const lang =
-    filename.toLowerCase().endsWith(".yaml") || filename.toLowerCase().endsWith("yml")
+    issue.filename.toLowerCase().endsWith(".yaml") || issue.filename.toLowerCase().endsWith("yml")
       ? "yaml"
       : "json";
   return (
@@ -32,7 +34,12 @@ export default function Issue({
       <p>
         <small>
           Issue ID:{" "}
-          <span className="issue-id" data-issue-id={issue.id}>
+          <span
+            className="issue-id"
+            onClick={(e) => {
+              copyIssueId(issue.id);
+            }}
+          >
             {issue.id}
           </span>
         </small>
@@ -41,12 +48,13 @@ export default function Issue({
         <small>
           <a
             className="focus-line"
-            data-line-no={issue.lineNo}
-            data-line-pointer={issue.pointer}
-            data-uri="base64"
             href="#"
+            onClick={(e) => {
+              goToLine(issue.lineNo, issue.pointer);
+              e.preventDefault();
+            }}
           >
-            {filename}:{issue.lineNo}
+            {issue.filename}:{issue.lineNo}
           </a>
           . Severity: {criticalityNames[issue.criticality]}. {scoreImpact}
         </small>

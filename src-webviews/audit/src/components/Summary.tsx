@@ -5,6 +5,20 @@ import { useState } from "react";
 export default function Summary() {
   const summary = useSelector((state: RootState) => state.report.summary);
 
+  if (summary.all === 0 && summary.invalid) {
+    return (
+      <>
+        <h1>Failed to perform security audit, the OpenAPI file is invalid or too large.</h1>
+        <div>
+          <small>
+            Please submit your feedback for the security audit{" "}
+            <a href="https://github.com/42Crunch/vscode-openapi/issues">here</a>
+          </small>
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="c_roundedbox">
       <h1>
