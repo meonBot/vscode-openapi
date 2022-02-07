@@ -7,13 +7,19 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { Audit } from "../types";
 import { readFileSync } from "fs";
+import { getArticles } from "./client";
+import { Cache } from "../cache";
+import { getLocationByPointer } from "./util";
 
 export class AuditReportWebView {
   private panel?: vscode.WebviewPanel;
   private style: string;
   private script: vscode.Uri;
+  private cache: Cache;
 
-  constructor(extensionPath: string) {
+  constructor(extensionPath: string, cache: Cache) {
+    this.cache = cache;
+
     this.script = vscode.Uri.file(
       path.join(extensionPath, "webview", "generated", "audit", "index.js")
     );
@@ -24,23 +30,67 @@ export class AuditReportWebView {
     );
   }
 
-  public show(extensionPath: string, kdb: any, audit: Audit) {
+  public async show(report: Audit) {
     if (!this.panel) {
+      const kdb = await getArticles();
       this.panel = this.createPanel(kdb);
     }
-    this.panel.webview.postMessage({ command: "show", audit });
+    this.panel.webview.postMessage({ command: "showFullReport", report });
   }
 
-  public showIds(extensionPath: string, kdb: any, audit: Audit, uri: string, ids: any[]) {
+  public async showIds(report: Audit, uri: string, ids: any[]) {
     if (!this.panel) {
+      const kdb = await getArticles();
       this.panel = this.createPanel(kdb);
     }
-    this.panel.webview.postMessage({ command: "showIds", audit, uri, ids });
+    this.panel.webview.postMessage({ command: "showPartialReport", report, uri, ids });
   }
 
-  public showIfVisible(audit: Audit) {}
+  public showIfVisible(report: Audit) {
+    if (this.panel && this.panel.visible) {
+      this.panel.webview.postMessage({ command: "showFullReport", report });
+    }
+  }
 
-  public showNoReport(context: vscode.ExtensionContext) {}
+  public async showNoReport() {
+    if (!this.panel) {
+      const kdb = await getArticles();
+      this.panel = this.createPanel(kdb);
+    }
+    this.panel.webview.postMessage({ command: "showNoReport" });
+  }
+
+  private async focusLine(uri: string, pointer: string, line: string) {
+    let editor: vscode.TextEditor | undefined = undefined;
+
+    // check if document is already open
+    for (const visibleEditor of vscode.window.visibleTextEditors) {
+      if (visibleEditor.document.uri.toString() == uri) {
+        editor = visibleEditor;
+      }
+    }
+
+    if (!editor) {
+      // if not already open, load and show it
+      const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(uri));
+      editor = await vscode.window.showTextDocument(document, vscode.ViewColumn.One);
+    }
+
+    let lineNo: number;
+
+    const root = this.cache.getParsedDocument(editor.document);
+    if (root) {
+      // use pointer by default
+      lineNo = getLocationByPointer(editor.document, root, pointer)[0];
+    } else {
+      // fallback to line no
+      lineNo = parseInt(line, 10);
+    }
+
+    const textLine = editor.document.lineAt(lineNo);
+    editor.selection = new vscode.Selection(lineNo, 0, lineNo, 0);
+    editor.revealRange(textLine.range, vscode.TextEditorRevealType.AtTop);
+  }
 
   public dispose() {}
 
@@ -64,6 +114,20 @@ export class AuditReportWebView {
       panel.webview.asWebviewUri(this.script),
       this.style
     );
+
+    panel.webview.onDidReceiveMessage((message) => {
+      console.log("hot message", message);
+      switch (message.command) {
+        case "copyIssueId":
+          vscode.env.clipboard.writeText(message.id);
+          const disposable = vscode.window.setStatusBarMessage(`Copied ID: ${message.id}`);
+          setTimeout(() => disposable.dispose(), 1000);
+          return;
+        case "goToLine":
+          this.focusLine(message.uri, message.pointer, message.line);
+          return;
+      }
+    }, null);
 
     panel.onDidDispose(() => (this.panel = undefined));
 
@@ -93,19 +157,8 @@ export class AuditReportWebView {
     window.addEventListener("DOMContentLoaded", (event) => {
       console.log('content loaded');
       const kdb = JSON.parse(document.getElementById("kdb").textContent);
-      window.addEventListener('message', event => {
-        console.log('got message', event);
-        const message = event.data;
-              switch (message.command) {
-                  case 'show':
-                      window.renderAuditReport(kdb, message.audit, null, null);
-                      break;
-                  case 'showIds':
-                      console.log("show ids", message.ids, message.uri);
-                      window.renderAuditReport(kdb, message.audit, message.uri, message.ids);
-                      break;
-              }
-      });
+      const vscode = acquireVsCodeApi();
+      window.renderAuditReport(vscode, kdb);
       console.log("all done");
     });
     </script>

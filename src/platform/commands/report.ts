@@ -30,8 +30,7 @@ export default (
           const document = await vscode.workspace.openTextDocument(uri);
           const audit = await refreshAuditReport(store, cache, auditContext, document);
           if (audit) {
-            const articles = await getArticles();
-            reportWebView.show(context.extensionPath, articles, audit);
+            reportWebView.show(audit);
           }
         } catch (e) {
           vscode.window.showErrorMessage(`Unexpected error: ${e}`);

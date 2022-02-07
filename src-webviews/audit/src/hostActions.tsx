@@ -3,9 +3,9 @@ import { HostApplication } from "./types";
 
 export const goToLine = createAsyncThunk(
   "host/goToLine",
-  async ({ line, pointer }: { line: number; pointer: string }, thunkAPI) => {
+  async ({ uri, line, pointer }: { uri: string; line: number; pointer: string }, thunkAPI) => {
     const host = thunkAPI.extra as HostApplication;
-    host.postMessage({ command: "goToLine", line, pointer });
+    host.postMessage({ command: "goToLine", uri, line, pointer });
   }
 );
 

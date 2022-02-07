@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Summary, Issue, Audit } from "./types";
 
 export interface ReportState {
-  display: "full" | "partial" | "no-report";
+  display: "loading" | "full" | "partial" | "no-report";
   summary: Summary;
   all: Issue[];
   selected: Issue[];
 }
 
 const initialState: ReportState = {
-  display: "no-report",
+  display: "loading",
   summary: {
     documentUri: "",
     subdocumentUris: [],
@@ -42,7 +42,6 @@ export const reportSlice = createSlice({
   initialState,
   reducers: {
     showFullReport: (state, action: PayloadAction<any>) => {
-      console.log("do show", action);
       state.display = "full";
       state.all = state.selected = flattenIssues(action.payload);
     },
@@ -50,12 +49,15 @@ export const reportSlice = createSlice({
       state,
       action: PayloadAction<{ report: any; uri: string; ids: string[] }>
     ) => {
-      console.log("do show ids", action.payload.report);
       const issues = flattenIssues(action.payload.report);
       const ids = action.payload.ids.map((id) => `${action.payload.uri}-${id}`);
       state.display = "partial";
       state.all = issues;
       state.selected = issues.filter((issue) => ids.includes(issue.key));
+    },
+    goToFullReport: (state) => {
+      state.display = "full";
+      state.selected = state.all;
     },
     showNoReport: (state) => {
       state.display = "no-report";
@@ -66,6 +68,7 @@ export const reportSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { showFullReport, showPartialReport, showNoReport } = reportSlice.actions;
+export const { showFullReport, showPartialReport, showNoReport, goToFullReport } =
+  reportSlice.actions;
 
 export default reportSlice.reducer;

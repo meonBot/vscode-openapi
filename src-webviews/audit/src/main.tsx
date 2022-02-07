@@ -28,14 +28,17 @@ function renderAuditReport(host: HostApplication, kdb: KdbState) {
     const message = event.data;
     switch (message.command) {
       case "showFullReport":
+        window.scrollTo(0, 0);
         store.dispatch(showFullReport(message.report));
         break;
       case "showPartialReport":
+        window.scrollTo(0, 0);
         store.dispatch(
           showPartialReport({ report: message.report, ids: message.ids, uri: message.uri })
         );
         break;
       case "showNoReport":
+        window.scrollTo(0, 0);
         store.dispatch(showNoReport());
         break;
     }

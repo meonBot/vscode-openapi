@@ -39,12 +39,11 @@ export function registerSecurityAudit(
       try {
         const audit = await securityAudit(cache, textEditor);
         if (audit) {
-          const articles = await getArticles();
           updateAuditContext(auditContext, uri, audit);
           updateDecorations(auditContext.decorations, audit.summary.documentUri, audit.issues);
           updateDiagnostics(auditContext.diagnostics, audit.filename, audit.issues);
           setDecorations(textEditor, auditContext);
-          reportWebView.show(context.extensionPath, articles, audit);
+          reportWebView.show(audit);
         }
         delete pendingAudits[uri];
       } catch (e) {
@@ -65,8 +64,7 @@ export function registerFocusSecurityAudit(
     try {
       const audit = auditContext.auditsByMainDocument[documentUri];
       if (audit) {
-        const articles = await getArticles();
-        reportWebView.show(context.extensionPath, articles, audit);
+        reportWebView.show(audit);
       }
     } catch (e) {
       vscode.window.showErrorMessage(`Unexpected error: ${e}`);
@@ -87,8 +85,7 @@ export function registerFocusSecurityAuditById(
         const uri = Buffer.from(params.uri, "base64").toString("utf8");
         const audit = auditContext.auditsByMainDocument[uri];
         if (audit && audit.issues[documentUri]) {
-          const articles = await getArticles();
-          reportWebView.showIds(context.extensionPath, articles, audit, documentUri, params.ids);
+          reportWebView.showIds(audit, documentUri, params.ids);
         }
       } catch (e) {
         vscode.window.showErrorMessage(`Unexpected error: ${e}`);

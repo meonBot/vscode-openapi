@@ -93,7 +93,7 @@ export async function activate(context: vscode.ExtensionContext) {
     diagnostics: vscode.languages.createDiagnosticCollection("audits"),
   };
 
-  const reportWebView = new AuditReportWebView(context.extensionPath);
+  const reportWebView = new AuditReportWebView(context.extensionPath, cache);
   audit.activate(context, auditContext, cache, reportWebView);
   preview.activate(context, cache, configuration);
   await platform.activate(context, auditContext, cache, reportWebView);

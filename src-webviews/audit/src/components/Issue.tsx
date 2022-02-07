@@ -50,8 +50,9 @@ export default function Issue({
             className="focus-line"
             href="#"
             onClick={(e) => {
-              goToLine(issue.lineNo, issue.pointer);
+              goToLine(issue.documentUri, issue.lineNo, issue.pointer);
               e.preventDefault();
+              e.stopPropagation();
             }}
           >
             {issue.filename}:{issue.lineNo}

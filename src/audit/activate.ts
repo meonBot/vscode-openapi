@@ -39,7 +39,7 @@ export function activate(
         // display no report only if the current document is not a
         // part of any multi-document run
         if (!subdocument) {
-          reportWebView.showNoReport(context);
+          reportWebView.showNoReport();
         }
       }
     }
