@@ -116,7 +116,6 @@ export class AuditReportWebView {
     );
 
     panel.webview.onDidReceiveMessage((message) => {
-      console.log("hot message", message);
       switch (message.command) {
         case "copyIssueId":
           vscode.env.clipboard.writeText(message.id);
@@ -125,6 +124,9 @@ export class AuditReportWebView {
           return;
         case "goToLine":
           this.focusLine(message.uri, message.pointer, message.line);
+          return;
+        case "openLink":
+          vscode.env.openExternal(vscode.Uri.parse(message.href));
           return;
       }
     }, null);

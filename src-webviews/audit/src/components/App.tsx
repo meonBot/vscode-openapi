@@ -6,7 +6,7 @@ import GoToFullReport from "./GoToFullReport";
 import NoReport from "./NoReport";
 
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { goToLine, copyIssueId } from "../hostActions";
+import { goToLine, copyIssueId, openLink } from "../hostActions";
 import { goToFullReport } from "../reportSlice";
 import Loading from "./Loading";
 
@@ -19,10 +19,11 @@ function App() {
   const hostGoToLine = (uri: string, line: number, pointer: string) =>
     dispatch(goToLine({ uri, line, pointer }));
   const hostCopyIssueId = (id: string) => dispatch(copyIssueId(id));
+  const hostOpenLink = (href: string) => dispatch(openLink(href));
 
   return (
     <>
-      {display !== "no-report" && <Header />}
+      {display !== "no-report" && <Header openLink={hostOpenLink} />}
       {display === "full" && <Summary />}
       {display === "no-report" && <NoReport />}
       {display === "loading" && <Loading />}
@@ -39,7 +40,7 @@ function App() {
       {display === "partial" && (
         <GoToFullReport goToFullReport={() => dispatch(goToFullReport())} />
       )}
-      {display !== "no-report" && <Footer />}
+      {display !== "no-report" && <Footer openLink={hostOpenLink} />}
     </>
   );
 }

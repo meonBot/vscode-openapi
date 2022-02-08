@@ -1,8 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import logo from "./icons/logo-light.svg";
 
-export default function Footer() {
+export default function Footer({ openLink }: { openLink: any }) {
   const [isOpen, setOpen] = useState(false);
+
+  const open = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    openLink(e.currentTarget.href);
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   const toggleOpen = () => {
     setOpen(!isOpen);
@@ -14,7 +20,7 @@ export default function Footer() {
         <div>
           <span className="font-weight-bold">Powered by</span>
           <span>
-            <a href="https://www.42crunch.com">
+            <a href="https://www.42crunch.com" onClick={open}>
               <img src={logo} alt="" />
             </a>
           </span>
@@ -25,9 +31,15 @@ export default function Footer() {
               Learn More
             </button>
             <div className={isOpen ? "dropdown-content show" : "dropdown-content"}>
-              <a href="https://42crunch.com/api-security-audit/">API Contract Security Audit</a>
-              <a href="https://42crunch.com/api-conformance-scan/">API Contract Conformance Scan</a>
-              <a href="https://42crunch.com/micro-api-firewall-protection/">API Protection</a>
+              <a href="https://42crunch.com/api-security-audit/" onClick={open}>
+                API Contract Security Audit
+              </a>
+              <a href="https://42crunch.com/api-conformance-scan/" onClick={open}>
+                API Contract Conformance Scan
+              </a>
+              <a href="https://42crunch.com/micro-api-firewall-protection/" onClick={open}>
+                API Protection
+              </a>
             </div>
           </div>
         </div>

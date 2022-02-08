@@ -13,3 +13,8 @@ export const copyIssueId = createAsyncThunk("host/copyIssueId", async (id: strin
   const host = thunkAPI.extra as HostApplication;
   host.postMessage({ command: "copyIssueId", id });
 });
+
+export const openLink = createAsyncThunk("host/openLink", async (href: string, thunkAPI) => {
+  const host = thunkAPI.extra as HostApplication;
+  host.postMessage({ command: "openLink", href });
+});
