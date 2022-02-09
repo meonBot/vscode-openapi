@@ -3,18 +3,18 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
 import { initStore } from "./store";
-
 import { showFullReport, showPartialReport, showNoReport } from "./reportSlice";
+import { changeTheme, ThemeState } from "./themeSlice";
+import { KdbState } from "./kdbSlice";
+import { HostApplication } from "./types";
 
 import App from "./components/App";
 
 import "./bootstrap.min.css";
 import "./style.css";
-import { KdbState } from "./kdbSlice";
-import { HostApplication } from "./types";
 
-function renderAuditReport(host: HostApplication, kdb: KdbState) {
-  const store = initStore(host, kdb);
+function renderAuditReport(host: HostApplication, kdb: KdbState, theme: ThemeState) {
+  const store = initStore(host, kdb, theme);
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
@@ -40,6 +40,15 @@ function renderAuditReport(host: HostApplication, kdb: KdbState) {
       case "showNoReport":
         window.scrollTo(0, 0);
         store.dispatch(showNoReport());
+        break;
+      case "changeTheme":
+        store.dispatch(
+          changeTheme({
+            kind: message.kind,
+            foreground: message.foreground,
+            background: message.background,
+          })
+        );
         break;
     }
   });

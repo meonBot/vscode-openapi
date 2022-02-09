@@ -1,7 +1,15 @@
 import React, { useState } from "react";
+import { ThemeState } from "../themeSlice";
 import logo from "./icons/logo-light.svg";
+import logoDark from "./icons/logo-dark.svg";
 
-export default function Footer({ openLink }: { openLink: any }) {
+export default function Footer({
+  openLink,
+  themeKind,
+}: {
+  openLink: any;
+  themeKind: ThemeState["kind"];
+}) {
   const [isOpen, setOpen] = useState(false);
 
   const open = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -18,10 +26,15 @@ export default function Footer({ openLink }: { openLink: any }) {
     <div className="c_footer">
       <div className="d-flex justify-content-between">
         <div>
-          <span className="font-weight-bold">Powered by</span>
+          <span
+            className="font-weight-bold"
+            style={{ display: "inline-block", verticalAlign: "middle", height: "100%" }}
+          >
+            Powered by
+          </span>
           <span>
             <a href="https://www.42crunch.com" onClick={open}>
-              <img src={logo} alt="" />
+              <img src={themeKind === "light" ? logo : logoDark} />
             </a>
           </span>
         </div>

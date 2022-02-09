@@ -16,6 +16,7 @@ export class AuditReportWebView {
   private style: string;
   private script: vscode.Uri;
   private cache: Cache;
+  private _disposables: vscode.Disposable[] = [];
 
   constructor(extensionPath: string, cache: Cache) {
     this.cache = cache;
@@ -92,7 +93,16 @@ export class AuditReportWebView {
     editor.revealRange(textLine.range, vscode.TextEditorRevealType.AtTop);
   }
 
-  public dispose() {}
+  public dispose() {
+    this.panel?.dispose();
+    this.panel = undefined;
+    while (this._disposables.length) {
+      const disposable = this._disposables.pop();
+      if (disposable) {
+        disposable.dispose();
+      }
+    }
+  }
 
   private createPanel(kdb: any): vscode.WebviewPanel {
     const panel = vscode.window.createWebviewPanel(
@@ -115,28 +125,44 @@ export class AuditReportWebView {
       this.style
     );
 
-    panel.webview.onDidReceiveMessage((message) => {
-      switch (message.command) {
-        case "copyIssueId":
-          vscode.env.clipboard.writeText(message.id);
-          const disposable = vscode.window.setStatusBarMessage(`Copied ID: ${message.id}`);
-          setTimeout(() => disposable.dispose(), 1000);
-          return;
-        case "goToLine":
-          this.focusLine(message.uri, message.pointer, message.line);
-          return;
-        case "openLink":
-          vscode.env.openExternal(vscode.Uri.parse(message.href));
-          return;
-      }
-    }, null);
+    panel.webview.onDidReceiveMessage(
+      (message) => {
+        switch (message.command) {
+          case "copyIssueId":
+            vscode.env.clipboard.writeText(message.id);
+            const disposable = vscode.window.setStatusBarMessage(`Copied ID: ${message.id}`);
+            setTimeout(() => disposable.dispose(), 1000);
+            return;
+          case "goToLine":
+            this.focusLine(message.uri, message.pointer, message.line);
+            return;
+          case "openLink":
+            vscode.env.openExternal(vscode.Uri.parse(message.href));
+            return;
+        }
+      },
+      null,
+      this._disposables
+    );
 
-    panel.onDidDispose(() => (this.panel = undefined));
+    vscode.window.onDidChangeActiveColorTheme(
+      (event) => {
+        const kind = event.kind === vscode.ColorThemeKind.Light ? "light" : "dark";
+        this.panel?.webview.postMessage({ command: "changeTheme", kind });
+      },
+      null,
+      this._disposables
+    );
+
+    panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
     return panel;
   }
 
   private getHtml(cspSource: string, kdb: any, script: vscode.Uri, style: string): string {
+    const themeKind =
+      vscode.window.activeColorTheme.kind == vscode.ColorThemeKind.Light ? "light" : "dark";
+
     return `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -145,8 +171,15 @@ export class AuditReportWebView {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>${style}</style>
       <style>
-        body {
-        background-color: #FEFEFE;
+        :root {
+          --audit-foreground: var(
+            --audit-custom-foreground,
+            var(--vscode-editor-foreground)
+          );
+          --audit-background: var(
+            --audit-custom-background,
+            var(--vscode-editor-background)
+          );
         }
       </style>
     </head>
@@ -160,7 +193,7 @@ export class AuditReportWebView {
       console.log('content loaded');
       const kdb = JSON.parse(document.getElementById("kdb").textContent);
       const vscode = acquireVsCodeApi();
-      window.renderAuditReport(vscode, kdb);
+      window.renderAuditReport(vscode, kdb, {kind: "${themeKind}"});
       console.log("all done");
     });
     </script>

@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Security Audit Report</title>
+    <style>
+      :root {
+        --audit-foreground: var(--audit-custom-foreground, var(--vscode-editor-foreground));
+        --audit-background: var(--audit-custom-background, var(--vscode-editor-background));
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
@@ -13,9 +19,15 @@
         console.log("DOM fully loaded and parsed");
         const kdb = JSON.parse(document.getElementById("kdb").textContent);
         const host = { postMessage: (message) => console.log("pm", message) };
-        window.renderAuditReport(host, kdb);
+        window.renderAuditReport(host, kdb, { kind: "light" });
         const audit = JSON.parse(document.getElementById("audit").textContent);
         window.postMessage({ command: "showFullReport", report: audit });
+        window.postMessage({
+          command: "changeTheme",
+          kind: "dark",
+          background: "lemonchiffon",
+          foreground: "maroon",
+        });
         //window.postMessage({ command: "showNoReport" });
       });
     </script>

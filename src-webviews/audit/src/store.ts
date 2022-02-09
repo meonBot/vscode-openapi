@@ -1,14 +1,16 @@
 import { configureStore, StateFromReducersMapObject } from "@reduxjs/toolkit";
 import kdbReducer, { KdbState } from "./kdbSlice";
 import reportReducer from "./reportSlice";
+import themeReducer, { ThemeState } from "./themeSlice";
 import { HostApplication } from "./types";
 
 const reducer = {
   report: reportReducer,
   kdb: kdbReducer,
+  theme: themeReducer,
 };
 
-export const initStore = (hostApplication: HostApplication, kdb: KdbState) =>
+export const initStore = (hostApplication: HostApplication, kdb: KdbState, theme: ThemeState) =>
   configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
@@ -19,6 +21,7 @@ export const initStore = (hostApplication: HostApplication, kdb: KdbState) =>
       }),
     preloadedState: {
       kdb,
+      theme,
     },
   });
 

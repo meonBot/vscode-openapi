@@ -1,7 +1,15 @@
 import { useState } from "react";
 import logo from "./icons/logo-light.svg";
+import logoDark from "./icons/logo-dark.svg";
+import { ThemeState } from "../themeSlice";
 
-export default function Header({ openLink }: { openLink: any }) {
+export default function Header({
+  openLink,
+  themeKind,
+}: {
+  openLink: any;
+  themeKind: ThemeState["kind"];
+}) {
   const [isOpen, setOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -18,10 +26,15 @@ export default function Header({ openLink }: { openLink: any }) {
     <div className="c_header">
       <div className="d-flex justify-content-between">
         <div>
-          <span className="font-weight-bold">Powered by</span>
+          <span
+            className="font-weight-bold"
+            style={{ display: "inline-block", verticalAlign: "middle", height: "100%" }}
+          >
+            Powered by
+          </span>
           <span>
             <a href="https://www.42crunch.com" onClick={open}>
-              <img src={logo} alt="" />
+              <img src={themeKind === "light" ? logo : logoDark} />
             </a>
           </span>
         </div>

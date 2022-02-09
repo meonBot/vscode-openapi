@@ -1,7 +1,8 @@
 import Article from "./Article";
-import { FilesMap, Issue as IssueType } from "../types";
-import chevronUp from "./icons/chevron-up.svg";
-import chevronDown from "./icons/chevron-down.svg";
+import { Issue as IssueType } from "../types";
+import { ReactComponent as ChevronUp } from "./icons/chevron-up.svg";
+import { ReactComponent as ChevronDown } from "./icons/chevron-down.svg";
+
 import { useState } from "react";
 
 export default function Issue({
@@ -28,8 +29,25 @@ export default function Issue({
   return (
     <div className="c_roundedbox_section">
       <h1 onClick={toggle} style={{ cursor: "pointer" }}>
-        {!isOpen && <img src={chevronDown} style={{ width: 20, height: 20 }} alt="" />}
-        {isOpen && <img src={chevronUp} style={{ width: 20, height: 20 }} alt="" />}{" "}
+        {isOpen ? (
+          <ChevronUp
+            style={{
+              width: 24,
+              height: 24,
+              marginRight: 8,
+              fill: "var(--audit-foreground)",
+            }}
+          />
+        ) : (
+          <ChevronDown
+            style={{
+              width: 24,
+              height: 24,
+              marginRight: 8,
+              fill: "var(--audit-foreground)",
+            }}
+          />
+        )}
         {issue.description}
       </h1>
 
