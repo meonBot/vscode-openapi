@@ -9,11 +9,13 @@ export default function Issue({
   issue,
   goToLine,
   copyIssueId,
+  openLink,
 }: {
   kdb: any;
   issue: IssueType;
   goToLine: any;
   copyIssueId: any;
+  openLink: any;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
@@ -61,7 +63,7 @@ export default function Issue({
         </small>
       </p>
 
-      {isOpen && <Article kdb={kdb} articleId={issue.id} lang={lang} />}
+      {isOpen && <Article kdb={kdb} articleId={issue.id} lang={lang} openLink={openLink} />}
     </div>
   );
 }

@@ -1,8 +1,13 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { useState } from "react";
 
-export default function Summary() {
+export default function Summary({ openLink }: { openLink: any }) {
+  const open = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    openLink(e.currentTarget.href);
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const summary = useSelector((state: RootState) => state.report.summary);
 
   if (summary.all === 0 && summary.invalid) {
@@ -12,7 +17,9 @@ export default function Summary() {
         <div>
           <small>
             Please submit your feedback for the security audit{" "}
-            <a href="https://github.com/42Crunch/vscode-openapi/issues">here</a>
+            <a onClick={open} href="https://github.com/42Crunch/vscode-openapi/issues">
+              here
+            </a>
           </small>
         </div>
       </>
@@ -42,10 +49,7 @@ export default function Summary() {
       <div>
         <small>
           Please submit your feedback for the security audit{" "}
-          <a
-            href="https://github.com/42Crunch/vscode-openapi/issues"
-            title="https://github.com/42Crunch/vscode-openapi/issues"
-          >
+          <a onClick={open} href="https://github.com/42Crunch/vscode-openapi/issues">
             here
           </a>
         </small>

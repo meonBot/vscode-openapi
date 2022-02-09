@@ -24,7 +24,7 @@ function App() {
   return (
     <>
       {display !== "no-report" && <Header openLink={hostOpenLink} />}
-      {display === "full" && <Summary />}
+      {display === "full" && <Summary openLink={hostOpenLink} />}
       {display === "no-report" && <NoReport />}
       {display === "loading" && <Loading />}
       {issues.map((issue) => (
@@ -34,6 +34,7 @@ function App() {
           key={issue.key}
           goToLine={hostGoToLine}
           copyIssueId={hostCopyIssueId}
+          openLink={hostOpenLink}
         />
       ))}
       {display === "full" && issues.length === 0 && <h3>No issues found in this file</h3>}

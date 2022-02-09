@@ -1,12 +1,35 @@
+import { useEffect, useRef } from "react";
+
 export default function Article({
   articleId,
   kdb,
   lang,
+  openLink,
 }: {
   articleId: string;
   kdb: any;
   lang: "json" | "yaml";
+  openLink: any;
 }) {
+  const onLinkClick = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    openLink(e.target.href);
+  };
+
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const links = ref.current!.querySelectorAll("a");
+    links.forEach((link) => {
+      link.addEventListener("click", onLinkClick);
+    });
+    return () => {
+      links.forEach((link) => {
+        link.removeEventListener("click", onLinkClick);
+      });
+    };
+  });
+
   const article = kdb[articleId] || fallbackArticle;
 
   const html = [
@@ -16,7 +39,7 @@ export default function Article({
     partToText(article.remediation, lang),
   ].join("");
 
-  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  return <div ref={ref} dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 function partToText(part: any, lang: "json" | "yaml"): string {
