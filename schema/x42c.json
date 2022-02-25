@@ -851,9 +851,9 @@
     },
     "X42cJwtVvalidationRsaV2": {
       "type": "object",
-      "required": ["x-42c-jwt-validation-rsa_0.1"],
+      "required": ["x-42c-jwt-validation-rsa_0.2"],
       "properties": {
-        "x-42c-jwt-validation-rsa_0.1": {
+        "x-42c-jwt-validation-rsa_0.2": {
           "type": "object",
           "required": ["header.name"],
           "properties": {
