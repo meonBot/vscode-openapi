@@ -16,9 +16,14 @@ export default defineConfig(({ command, mode }) => {
       minify: true,
       lib: {
         name: "scan",
-        entry: resolve(__dirname, "src/main.tsx"),
-        fileName: (format) => "index.js",
-        formats: ["iife"],
+        entry: {
+          scan: resolve(__dirname, "src/main.tsx"),
+        },
+        fileName: (format) => {
+          console.log("format me", format);
+          return "index.js";
+        },
+        formats: ["esm"],
       },
     },
     server: {

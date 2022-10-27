@@ -161,7 +161,7 @@ export abstract class WebView<Request extends Message, Response extends Message>
     </head>
     <body>
     <div id="root"></div>  
-    <script src="${script}"></script>
+    <script type="module" src="${script}"></script>
     <script>
       window.addEventListener("DOMContentLoaded", (event) => {
         const vscode = acquireVsCodeApi();
