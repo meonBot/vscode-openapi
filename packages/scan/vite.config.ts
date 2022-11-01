@@ -15,15 +15,20 @@ export default defineConfig(({ command, mode }) => {
     build: {
       minify: true,
       lib: {
-        name: "scan",
         entry: {
           scan: resolve(__dirname, "src/main.tsx"),
+          tryit: resolve(__dirname, "src/tryit.tsx"),
         },
-        fileName: (format) => {
-          console.log("format me", format);
-          return "index.js";
+        fileName: (format, name) => {
+          return `${name}.js`;
         },
-        formats: ["esm"],
+        formats: ["es"],
+      },
+      rollupOptions: {
+        output: {
+          entryFileNames: `[name].js`,
+          chunkFileNames: `[name].[hash].js`,
+        },
       },
     },
     server: {

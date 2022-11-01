@@ -13,14 +13,16 @@ import {
   ThemeColorVariables,
 } from "@xliic/common/theme";
 
+export type WebViewResponseHandler<Request extends Message, Response extends Message> =
+  | Record<Response["command"], (response: any) => Promise<Request | void>>
+  | { [key: string]: never };
+
 export abstract class WebView<Request extends Message, Response extends Message> {
   private style: vscode.Uri;
   private script: vscode.Uri;
   private panel?: vscode.WebviewPanel;
-  abstract responseHandlers: Record<
-    Response["command"],
-    (response: any) => Promise<Request | void>
-  >;
+
+  abstract responseHandlers: WebViewResponseHandler<Request, Response>;
 
   constructor(
     extensionPath: string,
@@ -29,7 +31,7 @@ export abstract class WebView<Request extends Message, Response extends Message>
     private column: vscode.ViewColumn
   ) {
     this.script = vscode.Uri.file(
-      path.join(extensionPath, "webview", "generated", viewId, "index.js")
+      path.join(extensionPath, "webview", "generated", viewId, `${viewId}.js`)
     );
     this.style = vscode.Uri.file(
       path.join(extensionPath, "webview", "generated", viewId, "style.css")
@@ -135,7 +137,7 @@ export abstract class WebView<Request extends Message, Response extends Message>
     </head>
     <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx?t=${Date.now()}"></script>
+    <script type="module" src="/src/${this.viewId}.tsx?t=${Date.now()}"></script>
     <script>
       window.addEventListener("DOMContentLoaded", (event) => {
         const vscode = acquireVsCodeApi();

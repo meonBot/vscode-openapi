@@ -8,34 +8,30 @@ import * as vscode from "vscode";
 import {
   ScanRunConfig,
   OasWithOperationAndConfig,
-  ScanRequest,
-  ScanResponse,
   ShowScanReportMessage,
   ErrorMessage,
   ShowResponseMessage,
   ShowErrorMessage,
 } from "@xliic/common/messages/scan";
 
-import { EnvRequest, EnvResponse, NamedEnvironment, replaceEnv } from "@xliic/common/messages/env";
-import { Preferences, PrefRequest, PrefResponse } from "@xliic/common/messages/prefs";
+import { NamedEnvironment, replaceEnv } from "@xliic/common/messages/env";
+import { Preferences } from "@xliic/common/messages/prefs";
+
+import { WebappRequest, WebappResponse } from "@xliic/common/webapp/scan";
 
 import { HttpRequest } from "@xliic/common/http";
 
-import { WebView } from "../../web-view";
+import { WebView, WebViewResponseHandler } from "../../web-view";
 import { Cache } from "../../cache";
 import { PlatformStore } from "../stores/platform-store";
 import { executeHttpRequestRaw } from "../../tryit/http-handler";
-import { stringify } from "@xliic/preserving-json-yaml-parser";
 import { Configuration } from "../../configuration";
 import { loadEnv, saveEnv } from "./env";
 
-export class ScanWebView extends WebView<
-  ScanRequest | EnvRequest | PrefRequest,
-  ScanResponse | EnvResponse | PrefResponse
-> {
+export class ScanWebView extends WebView<WebappRequest, WebappResponse> {
   private document?: vscode.TextDocument;
 
-  responseHandlers = {
+  responseHandlers: WebViewResponseHandler<WebappRequest, WebappResponse> = {
     runScan: async (config: ScanRunConfig): Promise<ShowScanReportMessage> => {
       try {
         return await runScan(

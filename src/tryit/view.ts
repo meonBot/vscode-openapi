@@ -5,11 +5,13 @@
 
 import * as vscode from "vscode";
 
-import { OasWithOperation, TryItRequest, TryItResponse } from "@xliic/common/messages/tryit";
-import { EnvRequest, EnvResponse, NamedEnvironment } from "@xliic/common/messages/env";
-import { Preferences, PrefRequest, PrefResponse } from "@xliic/common/messages/prefs";
+import { OasWithOperation } from "@xliic/common/messages/tryit";
+import { NamedEnvironment } from "@xliic/common/messages/env";
+import { Preferences } from "@xliic/common/messages/prefs";
 
-import { WebView } from "../web-view";
+import { WebappRequest, WebappResponse } from "@xliic/common/webapp/tryit";
+
+import { WebView, WebViewResponseHandler } from "../web-view";
 import { executeHttpRequest } from "./http-handler";
 import { executeCreateSchemaRequest } from "./create-schema-handler";
 import { Cache } from "../cache";
@@ -17,12 +19,9 @@ import { Cache } from "../cache";
 const ENV_DEFAULT_KEY = "openapi-42crunch.environment-default";
 const ENV_SECRETS_KEY = "openapi-42crunch.environment-secrets";
 
-export class TryItWebView extends WebView<
-  TryItRequest | EnvRequest | PrefRequest,
-  TryItResponse | EnvResponse | PrefResponse
-> {
+export class TryItWebView extends WebView<WebappRequest, WebappResponse> {
   private document?: vscode.TextDocument;
-  responseHandlers = {
+  responseHandlers: WebViewResponseHandler<WebappRequest, WebappResponse> = {
     sendRequest: executeHttpRequest,
     createSchema: async (response: any) => {
       executeCreateSchemaRequest(this.document!, this.cache, response);
@@ -51,7 +50,7 @@ export class TryItWebView extends WebView<
     private secret: vscode.SecretStorage,
     private prefs: Record<string, Preferences>
   ) {
-    super(extensionPath, "scan", "Try It", vscode.ViewColumn.Two);
+    super(extensionPath, "tryit", "Try It", vscode.ViewColumn.Two);
   }
 
   async sendTryOperation(document: vscode.TextDocument, payload: OasWithOperation) {
