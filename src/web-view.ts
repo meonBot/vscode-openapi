@@ -137,7 +137,7 @@ export abstract class WebView<Request extends Message, Response extends Message>
     </head>
     <body>
     <div id="root"></div>
-    <script type="module" src="/src/${this.viewId}.tsx?t=${Date.now()}"></script>
+    <script type="module" src="/src/app/${this.viewId}/index.tsx?t=${Date.now()}"></script>
     <script>
       window.addEventListener("DOMContentLoaded", (event) => {
         const vscode = acquireVsCodeApi();

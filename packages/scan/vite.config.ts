@@ -16,8 +16,8 @@ export default defineConfig(({ command, mode }) => {
       minify: true,
       lib: {
         entry: {
-          scan: resolve(__dirname, "src/main.tsx"),
-          tryit: resolve(__dirname, "src/tryit.tsx"),
+          scan: resolve(__dirname, "src/app/scan/index.tsx"),
+          tryit: resolve(__dirname, "src/app/tryit/index.tsx"),
         },
         fileName: (format, name) => {
           return `${name}.js`;
