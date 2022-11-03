@@ -4,14 +4,14 @@ import { TryitConfig } from "@xliic/common/messages/tryit";
 import { ThemeColorVariables } from "@xliic/common/theme";
 import { Check } from "@xliic/web-icons";
 import { useFormContext, useWatch } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
 
-import { saveConfig } from "../../features/tryit/slice";
+import { saveConfig } from "./slice";
 
-import { useAppDispatch } from "../../store/hooks";
 import { parseHttpsHostname } from "../../util";
 
 export default function Settings({ config }: { config: TryitConfig }) {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const { control } = useFormContext();
 

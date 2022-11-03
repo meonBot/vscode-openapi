@@ -3,10 +3,7 @@ import styled from "styled-components";
 import * as Tabs from "@radix-ui/react-tabs";
 import Button from "react-bootstrap/Button";
 
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-
-import { goBack } from "../../features/router/slice";
+import { useState } from "react";
 
 import { HttpResponse } from "@xliic/common/http";
 
@@ -14,9 +11,17 @@ import { ThemeColorVariables } from "@xliic/common/theme";
 import ResponseStatus from "./ResponseStatus";
 import Headers from "./Headers";
 import Body from "./Body";
-import Tools from "./Tools";
+import Tools from "../../app/tryit/Tools";
 
-export default function ResponseTabs({ response }: { response: HttpResponse }) {
+export default function ResponseTabs({
+  response,
+  tools,
+  goBack,
+}: {
+  response: HttpResponse;
+  tools?: JSX.Element;
+  goBack: Function;
+}) {
   const tabs = [
     {
       id: "body",
@@ -30,15 +35,16 @@ export default function ResponseTabs({ response }: { response: HttpResponse }) {
       content: <Headers headers={response.headers} />,
       enabled: true,
     },
-    {
-      id: "tools",
-      title: "Tools",
-      content: <Tools response={response} />,
-      enabled: true,
-    },
   ];
 
-  const dispatch = useAppDispatch();
+  if (tools) {
+    tabs.push({
+      id: "tools",
+      title: "Tools",
+      content: tools,
+      enabled: true,
+    });
+  }
 
   const activeId = tabs.filter((tab) => tab.enabled)?.[0]?.id;
 
@@ -59,7 +65,7 @@ export default function ResponseTabs({ response }: { response: HttpResponse }) {
             </TabButton>
           ))}
         <StyledResponseStatus response={response} />
-        <Button variant="primary" className="" onClick={() => dispatch(goBack())}>
+        <Button variant="primary" className="" onClick={() => goBack()}>
           Back
         </Button>
       </TabList>

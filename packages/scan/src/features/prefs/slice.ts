@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Dispatch, StateFromReducersMapObject } from "@reduxjs/toolkit";
+import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 
 import { Preferences } from "@xliic/common/messages/prefs";
 
@@ -30,5 +31,13 @@ export const slice = createSlice({
 });
 
 export const { loadPrefs, setScanServer, setTryitServer, setSecretForSecurity } = slice.actions;
+
+export const useFeatureDispatch: () => Dispatch<
+  ReturnType<typeof slice.actions[keyof typeof slice.actions]>
+> = useDispatch;
+
+export const useFeatureSelector: TypedUseSelectorHook<
+  StateFromReducersMapObject<Record<typeof slice.name, typeof slice.reducer>>
+> = useSelector;
 
 export default slice.reducer;

@@ -7,8 +7,7 @@ import Button from "react-bootstrap/Button";
 import { EnvData, Environment } from "@xliic/common/messages/env";
 import { Trash } from "@xliic/web-icons";
 
-import { useAppDispatch } from "../../store/hooks";
-import { saveEnv } from "./slice";
+import { saveEnv, useFeatureDispatch } from "./slice";
 import EnvKeyValue from "./EnvKeyValue";
 import AddNewRow from "./AddNewRow";
 import { useEffect } from "react";
@@ -20,7 +19,7 @@ export default function EnvironmentForm({
   name: keyof EnvData;
   data: Environment;
 }) {
-  const dispatch = useAppDispatch();
+  const dispatch = useFeatureDispatch();
 
   const defaultValues = wrapEnvironment(data);
 

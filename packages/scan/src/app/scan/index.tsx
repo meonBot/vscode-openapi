@@ -8,19 +8,19 @@ import { initStore, createListener } from "./store";
 import { changeTheme, ThemeState } from "@xliic/web-theme";
 import ThemeStyles from "@xliic/web-theme/ThemeStyles";
 
-import { showResponse, showError } from "../../features/tryit/slice";
-import { scanOperation, showScanReport, showScanResponse } from "../../features/scan/slice";
+import { showResponse, showError } from "../tryit/slice";
+import { scanOperation, showScanReport, showScanResponse } from "./slice";
 import { loadEnv } from "../../features/env/slice";
 import { loadPrefs } from "../../features/prefs/slice";
 
 import { useAppSelector } from "./store";
 
-import ScanOperation from "../../components/ScanOperation";
-import ScanReport from "../../components/ScanReport";
+import ScanOperation from "./ScanOperation";
+import ScanReport from "./ScanReport";
 import Env from "../../features/env/Env";
-import ScanResponse from "../../features/scan/Response";
-import Response from "../../components/response/Response";
-import Error from "../../components/Error";
+import ScanResponse from "./Response";
+import Response from "../tryit/Response";
+import Error from "../tryit/Error";
 
 import { PageName } from "./router";
 

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Dispatch, StateFromReducersMapObject } from "@reduxjs/toolkit";
+import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import { BundledOpenApiSpec } from "@xliic/common/oas30";
 import { TryitOperationValues } from "@xliic/common/messages/tryit";
 import { ScanConfig, OasWithOperationAndConfig, ErrorMessage } from "@xliic/common/messages/scan";
@@ -114,5 +115,13 @@ export const {
   showError,
   sendCurlRequest,
 } = slice.actions;
+
+export const useFeatureDispatch: () => Dispatch<
+  ReturnType<typeof slice.actions[keyof typeof slice.actions]>
+> = useDispatch;
+
+export const useFeatureSelector: TypedUseSelectorHook<
+  StateFromReducersMapObject<Record<typeof slice.name, typeof slice.reducer>>
+> = useSelector;
 
 export default slice.reducer;

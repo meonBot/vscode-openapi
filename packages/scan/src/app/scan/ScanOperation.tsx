@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getParameters, wrapFormDefaults, unwrapFormDefaults } from "../util";
+import { useAppDispatch, useAppSelector } from "./store";
+import { getParameters, wrapFormDefaults, unwrapFormDefaults } from "../../util";
 import { TryitSecurityValues, TryitSecurityValue } from "@xliic/common/messages/tryit";
-import Operation from "./operation/Operation";
-import { runScan } from "../features/scan/slice";
-import { setScanServer, setSecretForSecurity } from "../features/prefs/slice";
+import Operation from "../../components/operation/Operation";
+import { runScan } from "./slice";
+import { setScanServer, setSecretForSecurity } from "../../features/prefs/slice";
 
-import { updateScanConfig } from "../features/scan/util-scan";
+import { updateScanConfig } from "./util-scan";
 import Navigation from "./Navigation";
 import { SecretsForSecurity } from "@xliic/common/messages/prefs";
 import { BundledOpenApiSpec } from "@xliic/common/oas30";

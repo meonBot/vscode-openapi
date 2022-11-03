@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 import { HttpRequest } from "@xliic/common/http";
 import { replaceEnv } from "@xliic/common/messages/env";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "./store";
 
-import { sendScanRequest, sendCurlRequest } from "../features/scan/slice";
+import { sendScanRequest, sendCurlRequest } from "./slice";
 import Button from "react-bootstrap/Button";
 
 export default function CurlRequest({ curl }: { curl: string }) {

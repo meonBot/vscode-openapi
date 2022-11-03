@@ -8,21 +8,20 @@ import RequestBody from "./RequestBody";
 
 import { BundledOpenApiSpec, OasRequestBody, OperationParametersMap } from "@xliic/common/oas30";
 import { ThemeColorVariables } from "@xliic/common/theme";
-import { TryitSecurity, TryitConfig } from "@xliic/common/messages/tryit";
+import { TryitSecurity } from "@xliic/common/messages/tryit";
 
 import ParameterGroup from "../parameters/ParameterGroup";
 import Security from "./Security";
-import Settings from "./Settings";
 
 export default function OperationTabs({
   oas,
-  config,
+  settings,
   requestBody,
   parameters,
   security,
 }: {
   oas: BundledOpenApiSpec;
-  config?: TryitConfig;
+  settings?: JSX.Element;
   requestBody?: OasRequestBody;
   parameters: OperationParametersMap;
   security: TryitSecurity;
@@ -66,11 +65,11 @@ export default function OperationTabs({
     },
   ];
 
-  if (config) {
+  if (settings) {
     tabs.push({
       id: "settings",
       title: "Settings",
-      content: <Settings config={config} />,
+      content: settings,
       enabled: true,
     });
   }

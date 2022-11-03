@@ -2,8 +2,8 @@ import styled from "styled-components";
 import Button from "react-bootstrap/Button";
 import { ThemeColorVariables } from "@xliic/common/theme";
 
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { goBack } from "../features/router/slice";
+import { useAppDispatch, useAppSelector } from "./store";
+import { goBack } from "./router";
 
 export default function Error() {
   const dispatch = useAppDispatch();

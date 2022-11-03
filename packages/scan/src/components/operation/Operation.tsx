@@ -16,7 +16,7 @@ import OperationTabs from "./OperationTabs";
 
 export default function Operation({
   oas,
-  config,
+  settings,
   path,
   method,
   defaultValues,
@@ -24,7 +24,7 @@ export default function Operation({
   buttonText,
 }: {
   oas: BundledOpenApiSpec;
-  config?: TryitConfig;
+  settings?: JSX.Element;
   path: string;
   method: HttpMethod;
   defaultValues: Record<string, any>;
@@ -64,7 +64,7 @@ export default function Operation({
           <Servers servers={oas?.servers || []} />
           <OperationTabs
             oas={oas}
-            config={config}
+            settings={settings}
             requestBody={requestBody}
             parameters={parameters}
             security={security}

@@ -5,14 +5,13 @@ import * as Tabs from "@radix-ui/react-tabs";
 
 import { TabList, TabButton } from "../../components/Tabs";
 
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import Navigation from "../../components/Navigation";
+import { useFeatureSelector } from "./slice";
+import Navigation from "../../app/scan/Navigation";
 import Environment from "./Environment";
 import { EnvData } from "@xliic/common/messages/env";
 
 export default function Env() {
-  const dispatch = useAppDispatch();
-  const data = useAppSelector((state) => state.env.data);
+  const data = useFeatureSelector((state) => state.env.data);
 
   const [activeTab, setActiveTab] = useState("secrets");
   const tabs = [

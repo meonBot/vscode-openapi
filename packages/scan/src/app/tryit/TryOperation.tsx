@@ -2,14 +2,15 @@ import { TryitSecurityValues, TryitSecurityValue } from "@xliic/common/messages/
 import { SecretsForSecurity } from "@xliic/common/messages/prefs";
 import { BundledOpenApiSpec } from "@xliic/common/oas30";
 
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { sendRequest } from "../features/tryit/slice";
-import { setTryitServer, setSecretForSecurity } from "../features/prefs/slice";
+import { useAppDispatch, useAppSelector } from "./store";
+import { sendRequest } from "./slice";
+import { setTryitServer, setSecretForSecurity } from "../../features/prefs/slice";
 
-import Operation from "./operation/Operation";
+import Operation from "../../components/operation/Operation";
 
-import { getParameters, wrapFormDefaults, unwrapFormDefaults } from "../util";
-import { makeHttpRequest } from "../core/http";
+import { getParameters, wrapFormDefaults, unwrapFormDefaults } from "../../util";
+import { makeHttpRequest } from "../../core/http";
+import Settings from "./Settings";
 
 export default function TryOperation() {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ export default function TryOperation() {
     <>
       <Operation
         oas={oas}
-        config={tryitConfig}
+        settings={<Settings config={tryitConfig} />}
         path={path!}
         method={method!}
         defaultValues={wrapFormDefaults(updatedDefaults)}

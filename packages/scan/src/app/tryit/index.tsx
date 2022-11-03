@@ -8,15 +8,15 @@ import { initStore, createListener } from "./store";
 import { changeTheme, ThemeState } from "@xliic/web-theme";
 import ThemeStyles from "@xliic/web-theme/ThemeStyles";
 
-import { showResponse, showError, tryOperation } from "../../features/tryit/slice";
+import { showResponse, showError, tryOperation } from "./slice";
 import { loadEnv } from "../../features/env/slice";
 import { loadPrefs } from "../../features/prefs/slice";
 
 import { useAppSelector } from "./store";
 
-import TryOperation from "../../components/TryOperation";
-import Response from "../../components/response/Response";
-import Error from "../../components/Error";
+import TryOperation from "./TryOperation";
+import Response from "./Response";
+import Error from "./Error";
 
 import { PageName } from "./router";
 

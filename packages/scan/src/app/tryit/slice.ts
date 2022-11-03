@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Dispatch, StateFromReducersMapObject } from "@reduxjs/toolkit";
+import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import { BundledOpenApiSpec, getOperation } from "@xliic/common/oas30";
 import {
   OasWithOperation,
@@ -115,5 +116,13 @@ export const slice = createSlice({
 
 export const { tryOperation, showResponse, showError, sendRequest, createSchema, saveConfig } =
   slice.actions;
+
+export const useFeatureDispatch: () => Dispatch<
+  ReturnType<typeof slice.actions[keyof typeof slice.actions]>
+> = useDispatch;
+
+export const useFeatureSelector: TypedUseSelectorHook<
+  StateFromReducersMapObject<Record<typeof slice.name, typeof slice.reducer>>
+> = useSelector;
 
 export default slice.reducer;

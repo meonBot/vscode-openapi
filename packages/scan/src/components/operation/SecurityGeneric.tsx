@@ -7,7 +7,7 @@ import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
 
 import type { OasSecurityScheme } from "@xliic/common/oas30";
 
-import { useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../app/tryit/store";
 
 export function SecurityGeneric({
   name,

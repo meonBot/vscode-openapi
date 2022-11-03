@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
-import { tryOperation, showResponse, showError } from "../../features/tryit/slice";
+import { tryOperation, showResponse, showError } from "./slice";
 
 export type PageName = "loading" | "tryOperation" | "response" | "error";
 

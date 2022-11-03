@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Navigation from "./Navigation";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "./store";
 import ScanIssues from "./ScanIssues";
 import HappyPath from "./HappyPath";
 import ScanSummary from "./ScanSummary";

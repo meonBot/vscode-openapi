@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Dispatch, StateFromReducersMapObject } from "@reduxjs/toolkit";
+import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 
 import { EnvData, NamedEnvironment } from "@xliic/common/messages/env";
 
@@ -24,5 +25,13 @@ export const slice = createSlice({
 });
 
 export const { loadEnv, saveEnv } = slice.actions;
+
+export const useFeatureDispatch: () => Dispatch<
+  ReturnType<typeof slice.actions[keyof typeof slice.actions]>
+> = useDispatch;
+
+export const useFeatureSelector: TypedUseSelectorHook<
+  StateFromReducersMapObject<Record<typeof slice.name, typeof slice.reducer>>
+> = useSelector;
 
 export default slice.reducer;

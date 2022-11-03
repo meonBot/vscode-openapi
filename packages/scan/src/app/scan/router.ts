@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
-import {
-  scanOperation,
-  showScanReport,
-  showScanResponse as showScanResponse,
-} from "../../features/scan/slice";
+import { scanOperation, showScanReport, showScanResponse as showScanResponse } from "./slice";
 
 export type PageName =
   | "loading"

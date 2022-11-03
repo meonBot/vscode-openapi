@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "./store";
 import { ThemeColorVariables } from "@xliic/common/theme";
-import { goTo, PageName } from "../features/router/slice";
+import { goTo, PageName } from "./router";
 
 export default function Navigation({ tabs }: { tabs: [PageName, string][] }) {
   const dispatch = useAppDispatch();

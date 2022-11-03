@@ -12,7 +12,7 @@ import { WebappHost } from "@xliic/common/webapp/tryit";
 
 import theme, { ThemeState } from "@xliic/web-theme";
 import route from "./router";
-import tryit, { sendRequest, createSchema, saveConfig } from "../../features/tryit/slice";
+import tryit, { sendRequest, createSchema, saveConfig } from "./slice";
 import env, { saveEnv } from "../../features/env/slice";
 import prefs, { setTryitServer, setSecretForSecurity } from "../../features/prefs/slice";
 
