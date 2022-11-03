@@ -5,8 +5,8 @@ import { Provider } from "react-redux";
 import { WebappRequest, WebappResponse, WebappHost } from "@xliic/common/webapp/tryit";
 
 import { initStore, createListener } from "./store";
-import { changeTheme, ThemeState } from "@xliic/web-theme";
-import ThemeStyles from "@xliic/web-theme/ThemeStyles";
+import ThemeStyles from "../../features/theme/ThemeStyles";
+import { ThemeState, changeTheme } from "../../features/theme/slice";
 
 import { showResponse, showError, tryOperation } from "./slice";
 import { loadEnv } from "../../features/env/slice";
@@ -39,11 +39,10 @@ const requestHandlers: Record<WebappRequest["command"], Function> = {
 };
 
 function App() {
-  const theme = useAppSelector((state) => state.theme);
   const { page } = useAppSelector((state) => state.route);
   return (
     <>
-      <ThemeStyles theme={theme} />
+      <ThemeStyles />
       <div>{routes[page]}</div>
     </>
   );

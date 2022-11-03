@@ -10,7 +10,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { WebappHost } from "@xliic/common/webapp/scan";
 
-import theme, { ThemeState } from "@xliic/web-theme";
+import theme, { ThemeState } from "../../features/theme/slice";
+
 import route from "./router";
 import scan, { runScan, sendScanRequest, sendCurlRequest } from "./slice";
 import env, { saveEnv } from "../../features/env/slice";
