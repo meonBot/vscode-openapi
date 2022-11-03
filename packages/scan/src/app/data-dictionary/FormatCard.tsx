@@ -12,7 +12,7 @@ import {
   FlattenedDataFormat,
 } from "@xliic/common/data-dictionary";
 
-import collapsible from "../../hooks/collapsible";
+import collapsible from "./collapsible";
 
 export default function FormatCard({ format }: { format: FlattenedDataFormat }) {
   const [isOpen, toggle] = collapsible();

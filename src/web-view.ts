@@ -31,10 +31,10 @@ export abstract class WebView<Request extends Message, Response extends Message>
     private column: vscode.ViewColumn
   ) {
     this.script = vscode.Uri.file(
-      path.join(extensionPath, "webview", "generated", viewId, `${viewId}.js`)
+      path.join(extensionPath, "webview", "generated", "scan", `${viewId}.js`)
     );
     this.style = vscode.Uri.file(
-      path.join(extensionPath, "webview", "generated", viewId, "style.css")
+      path.join(extensionPath, "webview", "generated", "scan", "style.css")
     );
   }
 

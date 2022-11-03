@@ -18,6 +18,7 @@ export default defineConfig(({ command, mode }) => {
         entry: {
           scan: resolve(__dirname, "src/app/scan/index.tsx"),
           tryit: resolve(__dirname, "src/app/tryit/index.tsx"),
+          "data-dictionary": resolve(__dirname, "src/app/data-dictionary/index.tsx"),
         },
         fileName: (format, name) => {
           return `${name}.js`;

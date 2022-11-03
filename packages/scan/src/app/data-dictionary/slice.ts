@@ -15,7 +15,7 @@ const initialState: FormatsState = {
   formats: [],
 };
 
-export const formatsSlice = createSlice({
+export const slice = createSlice({
   name: "formats",
   initialState,
   reducers: {
@@ -43,6 +43,6 @@ export const formatsSlice = createSlice({
   },
 });
 
-export const { showDictionary } = formatsSlice.actions;
+export const { showDictionary } = slice.actions;
 
-export default formatsSlice.reducer;
+export default slice.reducer;

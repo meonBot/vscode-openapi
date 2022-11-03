@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../store/hooks";
-import FormatCard from "./data-dictionary/FormatCard";
+import { useAppSelector } from "./store";
+import FormatCard from "./FormatCard";
 import Alert from "react-bootstrap/Alert";
 import List from "@xliic/web-ui/List";
 import ThemeStyles from "@xliic/web-theme/ThemeStyles";
 import { ThemeColorVariables } from "@xliic/common/theme";
 
 function App() {
-  const theme = useAppSelector((state) => state.theme);
   const formats = useAppSelector((state) => state.formats.formats);
   const dictionaries = useAppSelector((state) => state.formats.dictionaries);
   const [selected, setSelected] = useState(dictionaries?.[0]?.id);
@@ -19,7 +18,6 @@ function App() {
   if (selected === undefined) {
     return (
       <>
-        <ThemeStyles theme={theme} />
         <Container>
           <Sidebar>
             <Header>Data Dictionaries</Header>
@@ -38,7 +36,6 @@ function App() {
 
   return (
     <>
-      <ThemeStyles theme={theme} />
       <Container>
         <Sidebar>
           <Header>Data Dictionaries</Header>
