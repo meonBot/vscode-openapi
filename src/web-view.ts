@@ -18,25 +18,16 @@ export type WebViewResponseHandler<Request extends Message, Response extends Mes
   | { [key: string]: never };
 
 export abstract class WebView<Request extends Message, Response extends Message> {
-  private style: vscode.Uri;
-  private script: vscode.Uri;
   private panel?: vscode.WebviewPanel;
 
   abstract responseHandlers: WebViewResponseHandler<Request, Response>;
 
   constructor(
-    extensionPath: string,
+    private extensionPath: string,
     private viewId: string,
     private viewTitle: string,
     private column: vscode.ViewColumn
-  ) {
-    this.script = vscode.Uri.file(
-      path.join(extensionPath, "webview", "generated", "scan", `${viewId}.js`)
-    );
-    this.style = vscode.Uri.file(
-      path.join(extensionPath, "webview", "generated", "scan", "style.css")
-    );
-  }
+  ) {}
 
   isActive(): boolean {
     return this.panel !== undefined;
@@ -93,17 +84,9 @@ export abstract class WebView<Request extends Message, Response extends Message>
     );
 
     if (process.env["XLIIC_WEB_VIEW_DEV_MODE"] === "true") {
-      panel.webview.html = this.getDevHtml(
-        panel.webview.cspSource,
-        panel.webview.asWebviewUri(this.script),
-        panel.webview.asWebviewUri(this.style)
-      );
+      panel.webview.html = this.getDevHtml(panel.webview.cspSource);
     } else {
-      panel.webview.html = this.getHtml(
-        panel.webview.cspSource,
-        panel.webview.asWebviewUri(this.script),
-        panel.webview.asWebviewUri(this.style)
-      );
+      panel.webview.html = this.getProdHtml(panel.webview.cspSource);
     }
 
     return new Promise((resolve, reject) => {
@@ -115,7 +98,7 @@ export abstract class WebView<Request extends Message, Response extends Message>
     });
   }
 
-  private getDevHtml(cspSource: string, script: vscode.Uri, style: vscode.Uri): string {
+  private getDevHtml(cspSource: string): string {
     return `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -149,7 +132,13 @@ export abstract class WebView<Request extends Message, Response extends Message>
     </html>`;
   }
 
-  private getHtml(cspSource: string, script: vscode.Uri, style: vscode.Uri): string {
+  private getProdHtml(cspSource: string): string {
+    const script = vscode.Uri.file(
+      path.join(this.extensionPath, "webview", "generated", "scan", `${this.viewId}.js`)
+    );
+    const style = vscode.Uri.file(
+      path.join(this.extensionPath, "webview", "generated", "scan", "style.css")
+    );
     return `<!DOCTYPE html>
     <html lang="en">
     <head>
