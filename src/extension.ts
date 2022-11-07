@@ -21,7 +21,7 @@ import { updateContext } from "./context";
 import { registerCommands } from "./commands";
 import { create as createWhatsNewPanel } from "./whatsnew";
 import { Cache } from "./cache";
-import { AuditReportWebView } from "./audit/report";
+import { AuditWebView } from "./audit/view";
 
 import * as yamlSchemaContributor from "./yaml-schema-contributor";
 import * as audit from "./audit/activate";
@@ -109,7 +109,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const prefs = {};
 
-  const reportWebView = new AuditReportWebView(context.extensionPath, cache);
+  const reportWebView = new AuditWebView(context.extensionPath, cache);
   audit.activate(context, auditContext, cache, reportWebView, platformStore);
   preview.activate(context, cache, configuration);
   tryit.activate(context, cache, configuration, context.workspaceState, context.secrets, prefs);

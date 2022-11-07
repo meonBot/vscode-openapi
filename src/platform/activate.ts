@@ -18,7 +18,7 @@ import { PlatformFS } from "./fs-provider";
 import { isPlatformUri } from "./util";
 import { CodelensProvider } from "./codelens";
 import { refreshAuditReport } from "./audit";
-import { AuditReportWebView } from "../audit/report";
+import { AuditWebView } from "../audit/view";
 import { DataDictionaryWebView } from "./data-dictionary/view";
 import { DataDictionaryCompletionProvider } from "./data-dictionary/completion";
 import { DataDictionaryCodeActions } from "./data-dictionary/code-actions";
@@ -31,7 +31,7 @@ export async function activate(
   cache: Cache,
   configuration: Configuration,
   store: PlatformStore,
-  reportWebView: AuditReportWebView,
+  reportWebView: AuditWebView,
   memento: vscode.Memento,
   secrets: vscode.SecretStorage,
   prefs: Record<string, Preferences>

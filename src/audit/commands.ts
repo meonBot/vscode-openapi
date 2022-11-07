@@ -8,7 +8,7 @@ import { audit } from "./client";
 import { setDecorations, updateDecorations } from "./decoration";
 import { updateDiagnostics } from "./diagnostic";
 
-import { AuditReportWebView } from "./report";
+import { AuditWebView } from "./view";
 
 import { AuditContext, Audit, PendingAudits, BundleResult, Bundle } from "../types";
 
@@ -24,7 +24,7 @@ export function registerSecurityAudit(
   cache: Cache,
   auditContext: AuditContext,
   pendingAudits: PendingAudits,
-  reportWebView: AuditReportWebView,
+  reportWebView: AuditWebView,
   store: PlatformStore
 ) {
   return vscode.commands.registerTextEditorCommand(
@@ -61,7 +61,7 @@ export function registerSecurityAudit(
           updateDecorations(auditContext.decorations, audit.summary.documentUri, audit.issues);
           updateDiagnostics(auditContext.diagnostics, audit.filename, audit.issues);
           setDecorations(textEditor, auditContext);
-          reportWebView.show(audit);
+          await reportWebView.showReport(audit);
         }
         delete pendingAudits[uri];
       } catch (e) {
@@ -76,13 +76,13 @@ export function registerFocusSecurityAudit(
   context: vscode.ExtensionContext,
   cache: Cache,
   auditContext: AuditContext,
-  reportWebView: AuditReportWebView
+  reportWebView: AuditWebView
 ) {
   return vscode.commands.registerCommand("openapi.focusSecurityAudit", async (documentUri) => {
     try {
       const audit = auditContext.auditsByMainDocument[documentUri];
       if (audit) {
-        reportWebView.show(audit);
+        reportWebView.showReport(audit);
       }
     } catch (e) {
       vscode.window.showErrorMessage(`Unexpected error: ${e}`);
@@ -93,7 +93,7 @@ export function registerFocusSecurityAudit(
 export function registerFocusSecurityAuditById(
   context: vscode.ExtensionContext,
   auditContext: AuditContext,
-  reportWebView: AuditReportWebView
+  reportWebView: AuditWebView
 ) {
   return vscode.commands.registerTextEditorCommand(
     "openapi.focusSecurityAuditById",
