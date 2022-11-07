@@ -58,6 +58,29 @@ const css = `body {
   margin: 0 10px !important;
 }
 
+#root small {
+ font-size: 0.8em;
+}
+
+#root p {
+  font-size: 0.8em;
+}
+
+#root h1 {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+#root h2 {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+#root h3 {
+  font-size: 1em;
+  font-weight: 600;
+}
+
 pre {
   white-space: pre-wrap;
 }
@@ -137,22 +160,20 @@ pre {
 .c_roundedbox h1 {
   margin-top: 0px;
 }
-.c_roundedbox h1 span {
+.c_roundedbox h1 span, .c_roundedbox h3 span {
   border: 1px solid #c4c4c4;
   border-radius: 5px;
-  padding: 5px 10px 5px 10px;
+  padding: 2px 5px 2px 5px;
 }
-.c_roundedbox h3 span {
-  border: 1px solid #c4c4c4;
-  border-radius: 5px;
-  padding: 5px 10px 5px 10px;
-}
+
 .progress-bar-holder {
   height: 10px;
   width: 100%;
   background-color: #c4c4c4;
   position: relative;
   border-radius: 10px;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .progress-bar {
