@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { TriangleExclamation, SquareCheck } from "@xliic/web-icons";
+import { TriangleExclamation, SquareCheck } from "../../icons";
 import { ThemeColorVariables } from "@xliic/common/theme";
 
 import CurlRequest from "./CurlRequest";

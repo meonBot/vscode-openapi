@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ThemeColorVariables } from "@xliic/common/theme";
-import { TriangleExclamation, SquareCheck } from "@xliic/web-icons";
+import { TriangleExclamation, SquareCheck } from "../../icons";
 
 export default function ScanSummary({
   summary,

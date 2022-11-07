@@ -1,4 +1,4 @@
-import { AngleUp, AngleDown } from "@xliic/web-icons";
+import { AngleUp, AngleDown } from "../../icons";
 import { ThemeColorVariables } from "@xliic/common/theme";
 
 export default function CollapsibleCaret({ isOpen }: { isOpen: boolean }) {

@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 import { EnvData, Environment } from "@xliic/common/messages/env";
-import { Trash } from "@xliic/web-icons";
+import { Trash } from "../../icons";
 
 import { saveEnv, useFeatureDispatch } from "./slice";
 import EnvKeyValue from "./EnvKeyValue";

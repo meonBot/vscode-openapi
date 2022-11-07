@@ -2,7 +2,7 @@ import styled from "styled-components";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { TryitConfig } from "@xliic/common/messages/tryit";
 import { ThemeColorVariables } from "@xliic/common/theme";
-import { Check } from "@xliic/web-icons";
+import { Check } from "../../icons";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "convert-icons": "svgr --icon --typescript --jsx-runtime automatic --out-dir src/icons icons",
     "test": "vitest"
   },
   "devDependencies": {
@@ -28,6 +29,7 @@
     "redux-logger": "^3.0.6",
     "styled-components": "^5.3.5",
     "swagger-client": "^3.18.5",
+    "@svgr/cli": "^6.2.1",
     "typescript": "4.7.4",
     "vite": "^3.2.0",
     "vite-plugin-svgr": "^2.2.0",
