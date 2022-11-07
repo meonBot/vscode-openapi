@@ -21,7 +21,6 @@
   "references": [
     { "path": "../common/tsconfig.esm.json" },
     { "path": "../web-ui" },
-    { "path": "../web-theme" },
     { "path": "../web-icons" }
   ]
 }

@@ -4,7 +4,6 @@ import { useAppSelector } from "./store";
 import FormatCard from "./FormatCard";
 import Alert from "react-bootstrap/Alert";
 import List from "@xliic/web-ui/List";
-import ThemeStyles from "@xliic/web-theme/ThemeStyles";
 import { ThemeColorVariables } from "@xliic/common/theme";
 
 function App() {

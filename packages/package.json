@@ -4,7 +4,6 @@
   "workspaces": [
     "scan",
     "web-icons",
-    "web-theme/dist",
     "web-ui/dist",
     "common/dist/esm"
   ],
