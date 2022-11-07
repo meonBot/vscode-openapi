@@ -16,6 +16,7 @@ export default defineConfig(({ command, mode }) => {
       minify: true,
       lib: {
         entry: {
+          audit: resolve(__dirname, "src/app/audit/index.tsx"),
           scan: resolve(__dirname, "src/app/scan/index.tsx"),
           tryit: resolve(__dirname, "src/app/tryit/index.tsx"),
           "data-dictionary": resolve(__dirname, "src/app/data-dictionary/index.tsx"),

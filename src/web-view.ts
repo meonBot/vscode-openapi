@@ -84,9 +84,9 @@ export abstract class WebView<Request extends Message, Response extends Message>
     );
 
     if (process.env["XLIIC_WEB_VIEW_DEV_MODE"] === "true") {
-      panel.webview.html = this.getDevHtml(panel.webview.cspSource);
+      panel.webview.html = this.getDevHtml(panel);
     } else {
-      panel.webview.html = this.getProdHtml(panel.webview.cspSource);
+      panel.webview.html = this.getProdHtml(panel);
     }
 
     return new Promise((resolve, reject) => {
@@ -98,12 +98,12 @@ export abstract class WebView<Request extends Message, Response extends Message>
     });
   }
 
-  private getDevHtml(cspSource: string): string {
+  private getDevHtml(panel: vscode.WebviewPanel): string {
     return `<!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
-      <meta http-equiv="Content-Security-Policy"  content="default-src 'none';  img-src ${cspSource} https: data:; script-src ${cspSource} http://localhost:3000/ 'unsafe-inline'; style-src ${cspSource} http://localhost:3000/ 'unsafe-inline'; connect-src http: https: ws:">
+      <meta http-equiv="Content-Security-Policy"  content="default-src 'none';  img-src https: data:; script-src http://localhost:3000/ 'unsafe-inline'; style-src http://localhost:3000/ 'unsafe-inline'; connect-src http: https: ws:">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <base href="http://localhost:3000/">
       <script type="module" src="/@vite/client"></script>
@@ -132,12 +132,15 @@ export abstract class WebView<Request extends Message, Response extends Message>
     </html>`;
   }
 
-  private getProdHtml(cspSource: string): string {
-    const script = vscode.Uri.file(
-      path.join(this.extensionPath, "webview", "generated", "scan", `${this.viewId}.js`)
+  private getProdHtml(panel: vscode.WebviewPanel): string {
+    const cspSource = panel.webview.cspSource;
+    const script = panel.webview.asWebviewUri(
+      vscode.Uri.file(
+        path.join(this.extensionPath, "webview", "generated", "scan", `${this.viewId}.js`)
+      )
     );
-    const style = vscode.Uri.file(
-      path.join(this.extensionPath, "webview", "generated", "scan", "style.css")
+    const style = panel.webview.asWebviewUri(
+      vscode.Uri.file(path.join(this.extensionPath, "webview", "generated", "scan", "style.css"))
     );
     return `<!DOCTYPE html>
     <html lang="en">
