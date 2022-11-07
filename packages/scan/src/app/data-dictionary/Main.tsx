@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useAppSelector } from "./store";
 import FormatCard from "./FormatCard";
 import Alert from "react-bootstrap/Alert";
-import List from "@xliic/web-ui/List";
+import List from "./List";
 import { ThemeColorVariables } from "@xliic/common/theme";
 
 function App() {

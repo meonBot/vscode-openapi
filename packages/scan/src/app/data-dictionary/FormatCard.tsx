@@ -4,7 +4,7 @@ import styled from "styled-components";
 import * as dayjs from "dayjs";
 
 import { ThemeColorVariables } from "@xliic/common/theme";
-import CollapsibleCaret from "@xliic/web-ui/CollapsibleCaret";
+import CollapsibleCaret from "./CollapsibleCaret";
 import {
   DataFormatEnum,
   DataFormatInteger,

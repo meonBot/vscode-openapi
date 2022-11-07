@@ -4,7 +4,6 @@
   "workspaces": [
     "scan",
     "web-icons",
-    "web-ui/dist",
     "common/dist/esm"
   ],
   "scripts": {
