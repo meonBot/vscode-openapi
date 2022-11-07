@@ -2,7 +2,6 @@
   "name": "@xliic/packages",
   "private": true,
   "workspaces": [
-    "audit",
     "scan",
     "web-icons",
     "web-theme/dist",
@@ -11,9 +10,8 @@
   ],
   "scripts": {
     "postinstall": "cd preview-redoc && npm install && cd ../preview-swaggerui && npm install",
-    "build": "npm run build-scan && npm run build-audit && npm run build-swaggerui && npm run build-redoc",
+    "build": "npm run build-scan && npm run build-swaggerui && npm run build-redoc",
     "build-scan": "cd scan && npm run build && mkdirp ../../webview/generated/scan && cpy --flat dist/* ../../webview/generated/scan",
-    "build-audit": "cd audit && npm run build && mkdirp ../../webview/generated/audit && cpy --flat dist/* ../../webview/generated/audit",
     "build-swaggerui": "cd preview-swaggerui && npm run build && mkdirp ../../webview/generated/preview/swaggerui && cpy --flat dist/* ../../webview/generated/preview/swaggerui",
     "build-redoc": "cd preview-redoc && npm run build && mkdirp ../../webview/generated/preview/redoc && cpy --flat dist/* ../../webview/generated/preview/redoc"
   },
