@@ -62,7 +62,7 @@ const css = `body {
  font-size: 0.8em;
 }
 
-#root p {
+#root {
   font-size: 0.8em;
 }
 
