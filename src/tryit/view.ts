@@ -9,7 +9,7 @@ import { OasWithOperation } from "@xliic/common/messages/tryit";
 import { NamedEnvironment } from "@xliic/common/messages/env";
 import { Preferences } from "@xliic/common/messages/prefs";
 
-import { WebappRequest, WebappResponse } from "@xliic/common/webapp/tryit";
+import { Webapp } from "@xliic/common/webapp/tryit";
 
 import { WebView, WebViewResponseHandler } from "../web-view";
 import { executeHttpRequest } from "./http-handler";
@@ -19,9 +19,9 @@ import { Cache } from "../cache";
 const ENV_DEFAULT_KEY = "openapi-42crunch.environment-default";
 const ENV_SECRETS_KEY = "openapi-42crunch.environment-secrets";
 
-export class TryItWebView extends WebView<WebappRequest, WebappResponse> {
+export class TryItWebView extends WebView<Webapp> {
   private document?: vscode.TextDocument;
-  responseHandlers: WebViewResponseHandler<WebappRequest, WebappResponse> = {
+  responseHandlers: WebViewResponseHandler<Webapp> = {
     sendRequest: executeHttpRequest,
     createSchema: async (response: any) => {
       executeCreateSchemaRequest(this.document!, this.cache, response);

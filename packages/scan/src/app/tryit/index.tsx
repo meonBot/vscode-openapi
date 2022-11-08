@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 
-import { WebappRequest, WebappResponse, WebappHost } from "@xliic/common/webapp/tryit";
+import { Webapp } from "@xliic/common/webapp/tryit";
 
 import { initStore, createListener } from "./store";
 import ThemeStyles from "../../features/theme/ThemeStyles";
@@ -29,7 +29,7 @@ const routes: Record<PageName, JSX.Element> = {
   loading: <div>Loading...</div>,
 };
 
-const requestHandlers: Record<WebappRequest["command"], Function> = {
+const requestHandlers: Record<Webapp["request"]["command"], Function> = {
   changeTheme,
   tryOperation,
   showResponse,
@@ -48,7 +48,7 @@ function App() {
   );
 }
 
-function renderWebView(host: WebappHost, theme: ThemeState) {
+function renderWebView(host: Webapp["host"], theme: ThemeState) {
   const store = initStore(createListener(host), theme);
 
   createRoot(document.getElementById("root")!).render(
@@ -60,7 +60,7 @@ function renderWebView(host: WebappHost, theme: ThemeState) {
   );
 
   window.addEventListener("message", (event) => {
-    const { command, payload } = event.data as WebappRequest;
+    const { command, payload } = event.data as Webapp["request"];
     if (command) {
       const handler = requestHandlers[command];
       if (handler) {

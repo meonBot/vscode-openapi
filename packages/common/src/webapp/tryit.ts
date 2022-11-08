@@ -1,9 +1,10 @@
+import { Webapp as App } from "../message";
 import { TryItRequest, TryItResponse } from "../messages/tryit";
 import { PrefRequest, PrefResponse } from "../messages/prefs";
 import { EnvRequest, EnvResponse } from "../messages/env";
 import { ThemeRequests } from "../messages/theme";
-import { HostApplication } from "../message";
 
-export type WebappRequest = TryItRequest | EnvRequest | PrefRequest | ThemeRequests;
-export type WebappResponse = TryItResponse | EnvResponse | PrefResponse;
-export type WebappHost = HostApplication<WebappResponse>;
+type Request = TryItRequest | EnvRequest | PrefRequest | ThemeRequests;
+type Response = TryItResponse | EnvResponse | PrefResponse;
+
+export type Webapp = App<Request, Response>;

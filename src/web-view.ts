@@ -5,7 +5,7 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
-import { Message } from "@xliic/common/message";
+import { AbstractWebapp } from "@xliic/common/message";
 import {
   VsCodeColorMap,
   ThemeColorName,
@@ -13,14 +13,14 @@ import {
   ThemeColorVariables,
 } from "@xliic/common/theme";
 
-export type WebViewResponseHandler<Request extends Message, Response extends Message> =
-  | Record<Response["command"], (response: any) => Promise<Request | void>>
+export type WebViewResponseHandler<A extends AbstractWebapp> =
+  | Record<A["response"]["command"], (response: any) => Promise<A["request"] | void>>
   | { [key: string]: never };
 
-export abstract class WebView<Request extends Message, Response extends Message> {
+export abstract class WebView<A extends AbstractWebapp> {
   private panel?: vscode.WebviewPanel;
 
-  abstract responseHandlers: WebViewResponseHandler<Request, Response>;
+  abstract responseHandlers: WebViewResponseHandler<A>;
 
   constructor(
     private extensionPath: string,
@@ -33,7 +33,7 @@ export abstract class WebView<Request extends Message, Response extends Message>
     return this.panel !== undefined;
   }
 
-  protected async sendRequest(request: Request): Promise<void> {
+  protected async sendRequest(request: A["request"]): Promise<void> {
     if (this.panel) {
       await this.panel!.webview.postMessage(request);
     } else {
@@ -41,8 +41,8 @@ export abstract class WebView<Request extends Message, Response extends Message>
     }
   }
 
-  async handleResponse(response: Response): Promise<void> {
-    const handler = this.responseHandlers[response.command as Response["command"]];
+  async handleResponse(response: A["response"]): Promise<void> {
+    const handler = this.responseHandlers[response.command as A["response"]["command"]];
 
     if (handler) {
       const request = await handler(response.payload);
@@ -61,7 +61,7 @@ export abstract class WebView<Request extends Message, Response extends Message>
       const panel = await this.createPanel();
       panel.onDidDispose(() => (this.panel = undefined));
       panel.webview.onDidReceiveMessage(async (message) => {
-        this.handleResponse(message as Response);
+        this.handleResponse(message as A["response"]);
       });
       this.panel = panel;
     } else if (!this.panel.visible) {

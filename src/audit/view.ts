@@ -4,17 +4,17 @@
 */
 
 import * as vscode from "vscode";
-import { WebappRequest, WebappResponse } from "@xliic/common/webapp/audit";
+import { Webapp } from "@xliic/common/webapp/audit";
 import { WebView, WebViewResponseHandler } from "../web-view";
 import { Cache } from "../cache";
 import { getLocationByPointer } from "./util";
 import { getArticles } from "./client";
 import { Audit } from "../types";
 
-export class AuditWebView extends WebView<WebappRequest, WebappResponse> {
+export class AuditWebView extends WebView<Webapp> {
   private kdb?: Promise<any>;
 
-  responseHandlers: WebViewResponseHandler<WebappRequest, WebappResponse> = {
+  responseHandlers: WebViewResponseHandler<Webapp> = {
     copyIssueId: async (issueId: string) => {
       vscode.env.clipboard.writeText(issueId);
       const disposable = vscode.window.setStatusBarMessage(`Copied ID: ${issueId}`);

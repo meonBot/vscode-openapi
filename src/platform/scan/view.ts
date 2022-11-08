@@ -17,7 +17,7 @@ import {
 import { NamedEnvironment, replaceEnv } from "@xliic/common/messages/env";
 import { Preferences } from "@xliic/common/messages/prefs";
 
-import { WebappRequest, WebappResponse } from "@xliic/common/webapp/scan";
+import { Webapp } from "@xliic/common/webapp/scan";
 
 import { HttpRequest } from "@xliic/common/http";
 
@@ -28,10 +28,10 @@ import { executeHttpRequestRaw } from "../../tryit/http-handler";
 import { Configuration } from "../../configuration";
 import { loadEnv, saveEnv } from "./env";
 
-export class ScanWebView extends WebView<WebappRequest, WebappResponse> {
+export class ScanWebView extends WebView<Webapp> {
   private document?: vscode.TextDocument;
 
-  responseHandlers: WebViewResponseHandler<WebappRequest, WebappResponse> = {
+  responseHandlers: WebViewResponseHandler<Webapp> = {
     runScan: async (config: ScanRunConfig): Promise<ShowScanReportMessage> => {
       try {
         return await runScan(

@@ -1,5 +1,5 @@
+import { Webapp as App } from "../message";
 import { ThemeRequests } from "../messages/theme";
-import { HostApplication } from "../message";
 import { Audit, Kdb } from "../audit";
 
 declare type ShowFullReportMessage = {
@@ -22,13 +22,6 @@ declare type LoadKdbMessage = {
   payload: Kdb;
 };
 
-export type WebappRequest =
-  | ShowFullReportMessage
-  | ShowPartialReportMessage
-  | ShowNoReportMessage
-  | LoadKdbMessage
-  | ThemeRequests;
-
 type GoToLineMessage = {
   command: "goToLine";
   payload: { uri: string; line: number; pointer: string };
@@ -44,6 +37,13 @@ type OpenLinkMessage = {
   payload: string;
 };
 
-export type WebappResponse = GoToLineMessage | CopyIssueIdMessage | OpenLinkMessage;
+type Request =
+  | ShowFullReportMessage
+  | ShowPartialReportMessage
+  | ShowNoReportMessage
+  | LoadKdbMessage
+  | ThemeRequests;
 
-export type WebappHost = HostApplication<WebappResponse>;
+type Response = GoToLineMessage | CopyIssueIdMessage | OpenLinkMessage;
+
+export type Webapp = App<Request, Response>;

@@ -4,11 +4,11 @@
 */
 
 import * as vscode from "vscode";
-import { WebappRequest, WebappResponse } from "@xliic/common/webapp/data-dictionary";
+import { Webapp } from "@xliic/common/webapp/data-dictionary";
 import { DataDictionaryRequest } from "@xliic/common/messages/data-dictionary";
 import { WebView } from "../../web-view";
 
-export class DataDictionaryWebView extends WebView<WebappRequest, WebappResponse> {
+export class DataDictionaryWebView extends WebView<Webapp> {
   responseHandlers = {
     noop: () => Promise.resolve(),
   };

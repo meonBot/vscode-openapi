@@ -8,7 +8,7 @@ import logger from "redux-logger";
 import { createListenerMiddleware, isAnyOf, TypedStartListening } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
-import { WebappHost } from "@xliic/common/webapp/tryit";
+import { Webapp } from "@xliic/common/webapp/tryit";
 
 import theme, { ThemeState } from "../../features/theme/slice";
 import route from "./router";
@@ -44,7 +44,7 @@ const startAppListening = listenerMiddleware.startListening as AppStartListening
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function createListener(host: WebappHost) {
+export function createListener(host: Webapp["host"]) {
   startAppListening({
     actionCreator: sendRequest,
     effect: async (action, listenerApi) => {
