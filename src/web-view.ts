@@ -103,7 +103,7 @@ export abstract class WebView<A extends AbstractWebapp> {
     <html lang="en">
     <head>
       <meta charset="UTF-8">
-      <meta http-equiv="Content-Security-Policy"  content="default-src 'none';  img-src https: data:; script-src http://localhost:3000/ 'unsafe-inline'; style-src http://localhost:3000/ 'unsafe-inline'; connect-src http: https: ws:">
+      <meta http-equiv="Content-Security-Policy"  content="default-src 'none';  img-src https: data: http://localhost:3000/; script-src http://localhost:3000/ 'unsafe-inline'; style-src http://localhost:3000/ 'unsafe-inline'; connect-src http: https: ws:">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <base href="http://localhost:3000/">
       <script type="module">

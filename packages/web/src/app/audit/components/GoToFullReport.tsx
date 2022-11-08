@@ -1,6 +1,6 @@
 export default function GoToFullReport({ goToFullReport }: { goToFullReport: any }) {
   return (
-    <h4>
+    <h6>
       <a
         className="go-full-report"
         href="#"
@@ -12,6 +12,6 @@ export default function GoToFullReport({ goToFullReport }: { goToFullReport: any
       >
         Go back to full report
       </a>
-    </h4>
+    </h6>
   );
 }

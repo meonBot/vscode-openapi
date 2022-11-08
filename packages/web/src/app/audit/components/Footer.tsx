@@ -25,10 +25,7 @@ export default function Footer({
     <div className="c_footer">
       <div className="d-flex justify-content-between">
         <div>
-          <span
-            className="font-weight-bold"
-            style={{ display: "inline-block", verticalAlign: "middle", height: "100%" }}
-          >
+          <span className="font-weight-bold" style={{ display: "inline-block", height: "100%" }}>
             Powered by
           </span>
           <span>
