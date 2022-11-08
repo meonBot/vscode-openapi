@@ -106,7 +106,6 @@ export abstract class WebView<A extends AbstractWebapp> {
       <meta http-equiv="Content-Security-Policy"  content="default-src 'none';  img-src https: data:; script-src http://localhost:3000/ 'unsafe-inline'; style-src http://localhost:3000/ 'unsafe-inline'; connect-src http: https: ws:">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <base href="http://localhost:3000/">
-      <script type="module" src="/@vite/client"></script>
       <script type="module">
       import RefreshRuntime from "/@react-refresh"
       RefreshRuntime.injectIntoGlobalHook(window)
@@ -114,13 +113,14 @@ export abstract class WebView<A extends AbstractWebapp> {
       window.$RefreshSig$ = () => (type) => type
       window.__vite_plugin_react_preamble_installed__ = true
       </script>
+      <script type="module" src="/@vite/client"></script>
       <style>
         ${customCssProperties()}
       </style>
     </head>
     <body>
     <div id="root"></div>
-    <script type="module" src="/src/app/${this.viewId}/index.tsx?t=${Date.now()}"></script>
+    <script type="module" src="/src/app/${this.viewId}/index.tsx"></script>
     <script>
       window.addEventListener("DOMContentLoaded", (event) => {
         const vscode = acquireVsCodeApi();
