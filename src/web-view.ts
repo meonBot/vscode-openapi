@@ -136,11 +136,11 @@ export abstract class WebView<A extends AbstractWebapp> {
     const cspSource = panel.webview.cspSource;
     const script = panel.webview.asWebviewUri(
       vscode.Uri.file(
-        path.join(this.extensionPath, "webview", "generated", "scan", `${this.viewId}.js`)
+        path.join(this.extensionPath, "webview", "generated", "web", `${this.viewId}.js`)
       )
     );
     const style = panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(this.extensionPath, "webview", "generated", "scan", "style.css"))
+      vscode.Uri.file(path.join(this.extensionPath, "webview", "generated", "web", "style.css"))
     );
     return `<!DOCTYPE html>
     <html lang="en">
