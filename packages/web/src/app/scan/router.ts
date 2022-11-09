@@ -9,18 +9,23 @@ export type PageName =
   | "scanResponse"
   | "tryOperation"
   | "response"
-  | "scanResponse"
   | "error"
   | "env";
 
 export interface RouteState {
   page: PageName;
   history: PageName[];
+  routes: any;
 }
 
 const initialState: RouteState = {
   page: "loading",
   history: [],
+  routes: {
+    scan: { title: "Scan" },
+    report: { title: "Report" },
+    env: { title: "Environment" },
+  },
 };
 
 export const slice = createSlice({

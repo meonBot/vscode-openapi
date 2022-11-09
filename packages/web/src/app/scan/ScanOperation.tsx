@@ -6,7 +6,6 @@ import { runScan } from "./slice";
 import { setScanServer, setSecretForSecurity } from "../../features/prefs/slice";
 
 import { updateScanConfig } from "./util-scan";
-import Navigation from "./Navigation";
 import { SecretsForSecurity } from "@xliic/common/messages/prefs";
 import { BundledOpenApiSpec } from "@xliic/common/oas30";
 
@@ -54,14 +53,6 @@ export default function ScanOperation() {
 
   return (
     <>
-      <Navigation
-        tabs={[
-          ["scanOperation", "Scan"],
-          ["scanReport", "Report"],
-          ["env", "Environment"],
-        ]}
-      />
-
       <Operation
         oas={oas}
         path={path!}

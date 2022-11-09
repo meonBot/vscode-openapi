@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Navigation from "./Navigation";
 import { useAppDispatch, useAppSelector } from "./store";
 import ScanIssues from "./ScanIssues";
 import HappyPath from "./HappyPath";
@@ -11,13 +10,6 @@ export default function ScanReport() {
   if (scanReport === undefined) {
     return (
       <Container>
-        <Navigation
-          tabs={[
-            ["scanOperation", "Scan"],
-            ["scanReport", "Report"],
-            ["env", "Environment"],
-          ]}
-        />
         <Message>Report is not yet available</Message>
       </Container>
     );
@@ -39,13 +31,6 @@ export default function ScanReport() {
 
   return (
     <Container>
-      <Navigation
-        tabs={[
-          ["scanOperation", "Scan"],
-          ["scanReport", "Report"],
-          ["env", "Environment"],
-        ]}
-      />
       <ScanSummary summary={scanReport.summary} happyPathExpected={happyPath.expected} />
       <HappyPath happyPath={happyPath} />
       <ScanIssues issues={allIssues} error={null} />

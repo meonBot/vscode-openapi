@@ -6,7 +6,6 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { TabList, TabButton } from "../../components/Tabs";
 
 import { useFeatureSelector } from "./slice";
-import Navigation from "../../app/scan/Navigation";
 import Environment from "./Environment";
 import { EnvData } from "@xliic/common/messages/env";
 
@@ -31,13 +30,6 @@ export default function Env() {
 
   return (
     <>
-      <Navigation
-        tabs={[
-          ["scanOperation", "Scan"],
-          ["scanReport", "Report"],
-          ["env", "Environment"],
-        ]}
-      />
       <Container>
         <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
           <TabList>

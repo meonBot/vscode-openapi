@@ -1,19 +1,31 @@
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "./store";
 import { ThemeColorVariables } from "@xliic/common/theme";
-import { goTo, PageName } from "./router";
+import { goTo } from "./slice";
 
-export default function Navigation({ tabs }: { tabs: [PageName, string][] }) {
-  const dispatch = useAppDispatch();
-  const currentPage = useAppSelector((state) => state.route.page);
+import { RouterContext, Routes } from "./RouterContext";
+import { useFeatureSelector, useFeatureDispatch } from "./slice";
+
+export default function Navigation() {
+  return (
+    <RouterContext.Consumer>
+      {(routes) => <InnerNavigation routes={routes} />}
+    </RouterContext.Consumer>
+  );
+}
+
+function InnerNavigation({ routes }: { routes: Routes }) {
+  const dispatch = useFeatureDispatch();
+  const current = useFeatureSelector((state) => state.router.current);
+
+  const tabs = routes.map((route) => [route.id, route.title]);
 
   return (
     <NavigationContent>
       {tabs.map(([page, title]) => (
         <NavigationTab
           key={page}
-          active={page === currentPage}
-          onClick={() => dispatch(goTo(page))}
+          active={page === current[0]}
+          onClick={() => dispatch(goTo([page]))}
         >
           <div>{title}</div>
         </NavigationTab>

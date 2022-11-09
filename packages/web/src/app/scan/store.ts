@@ -11,16 +11,17 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { Webapp } from "@xliic/common/webapp/scan";
 
 import theme, { ThemeState } from "../../features/theme/slice";
+import router, { goTo } from "../../features/router/slice";
 
-import route from "./router";
 import scan, { runScan, sendScanRequest, sendCurlRequest } from "./slice";
 import env, { saveEnv } from "../../features/env/slice";
 import prefs, { setScanServer, setSecretForSecurity } from "../../features/prefs/slice";
+import { Routes } from "../../features/router/RouterContext";
 
 const reducer = {
   theme,
   scan,
-  route,
+  router,
   env,
   prefs,
 };
@@ -45,7 +46,19 @@ const startAppListening = listenerMiddleware.startListening as AppStartListening
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function createListener(host: Webapp["host"]) {
+export function createListener(host: Webapp["host"], routes: Routes) {
+  for (const route of routes) {
+    if (route.when) {
+      startAppListening({
+        actionCreator: route.when,
+        effect: async (action, listenerApi) => {
+          console.log("go to route", route);
+          listenerApi.dispatch(goTo([route.id]));
+        },
+      });
+    }
+  }
+
   startAppListening({
     actionCreator: runScan,
     effect: async (action, listenerApi) => {
