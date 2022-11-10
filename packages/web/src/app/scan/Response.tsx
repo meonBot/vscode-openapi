@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import { useAppSelector, useAppDispatch } from "./store";
-import { goBack } from "./router";
+import { goBack } from "../../features/router/slice";
 
 import ResponseTabs from "../../components/response/ResponseTabs";
 

@@ -47,17 +47,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export function createListener(host: Webapp["host"], routes: Routes) {
-  for (const route of routes) {
-    if (route.when) {
-      startAppListening({
-        actionCreator: route.when,
-        effect: async (action, listenerApi) => {
-          console.log("go to route", route);
-          listenerApi.dispatch(goTo([route.id]));
-        },
-      });
-    }
-  }
+  walkRoutes(routes);
 
   startAppListening({
     actionCreator: runScan,
@@ -115,4 +105,21 @@ export function createListener(host: Webapp["host"], routes: Routes) {
   });
 
   return listenerMiddleware;
+}
+
+function walkRoutes(routes: Routes, parent: Routes = []) {
+  for (const route of routes) {
+    if (route.when) {
+      startAppListening({
+        actionCreator: route.when,
+        effect: async (action, listenerApi) => {
+          const ids = parent.map((route) => route.id);
+          listenerApi.dispatch(goTo([...ids, route.id]));
+        },
+      });
+    }
+    if (route.children) {
+      walkRoutes(route.children, [...parent, route]);
+    }
+  }
 }

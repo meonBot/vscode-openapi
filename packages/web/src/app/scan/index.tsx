@@ -11,19 +11,15 @@ import Router from "../../features/router/Router";
 import { RouterContext, Routes } from "../../features/router/RouterContext";
 import Navigation from "../../features/router/Navigation";
 
-import { showResponse, showError } from "../tryit/slice";
-import { scanOperation, showScanReport, showScanResponse } from "./slice";
+import { scanOperation, showScanReport, showScanResponse, showError } from "./slice";
 import { loadEnv } from "../../features/env/slice";
 import { loadPrefs } from "../../features/prefs/slice";
-
-import { useAppSelector } from "./store";
 
 import ScanOperation from "./ScanOperation";
 import ScanReport from "./ScanReport";
 import Env from "../../features/env/Env";
 import ScanResponse from "./Response";
-import Response from "../tryit/Response";
-import Error from "../tryit/Error";
+import Error from "./Error";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -33,25 +29,19 @@ const routes: Routes = [
     title: "Scan",
     element: <ScanOperation />,
     when: scanOperation,
+  },
+  {
+    id: "report",
+    title: "Report",
+    element: <ScanReport />,
+    when: showScanReport,
     children: [
       { id: "response", title: "Response", element: <ScanResponse />, when: showScanResponse },
       { id: "error", title: "Error", element: <Error />, when: showError },
     ],
   },
-  { id: "report", title: "Report", element: <ScanReport />, when: showScanReport },
   { id: "env", title: "Environment", element: <Env /> },
 ];
-
-// const routes: Record<PageName, JSX.Element> = {
-//   scanOperation: <ScanOperation />,
-//   tryOperation: <div>nope</div>,
-//   scanReport: <ScanReport />,
-//   scanResponse: <ScanResponse />,
-//   response: <Response />,
-//   error: <Error />,
-//   env: <Env />,
-//   loading: <div>Loading...</div>,
-// };
 
 const requestHandlers: Record<Webapp["request"]["command"], Function> = {
   changeTheme,
