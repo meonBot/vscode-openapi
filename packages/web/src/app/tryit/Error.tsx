@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import { ThemeColorVariables } from "@xliic/common/theme";
 
 import { useAppDispatch, useAppSelector } from "./store";
-import { goBack } from "./router";
+import { goBack } from "../../features/router/slice";
 
 export default function Error() {
   const dispatch = useAppDispatch();

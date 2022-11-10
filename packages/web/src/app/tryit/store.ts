@@ -11,15 +11,17 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { Webapp } from "@xliic/common/webapp/tryit";
 
 import theme, { ThemeState } from "../../features/theme/slice";
-import route from "./router";
 import tryit, { sendRequest, createSchema, saveConfig } from "./slice";
 import env, { saveEnv } from "../../features/env/slice";
 import prefs, { setTryitServer, setSecretForSecurity } from "../../features/prefs/slice";
+import router from "../../features/router/slice";
+import { startNavigationListening } from "../../features/router/listener";
+import { Routes } from "../../features/router/RouterContext";
 
 const reducer = {
   theme,
   tryit,
-  route,
+  router,
   env,
   prefs,
 };
@@ -44,7 +46,9 @@ const startAppListening = listenerMiddleware.startListening as AppStartListening
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function createListener(host: Webapp["host"]) {
+export function createListener(host: Webapp["host"], routes: Routes) {
+  startNavigationListening(startAppListening, routes);
+
   startAppListening({
     actionCreator: sendRequest,
     effect: async (action, listenerApi) => {

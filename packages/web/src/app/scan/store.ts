@@ -11,12 +11,13 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { Webapp } from "@xliic/common/webapp/scan";
 
 import theme, { ThemeState } from "../../features/theme/slice";
-import router, { goTo } from "../../features/router/slice";
+import router from "../../features/router/slice";
 
 import scan, { runScan, sendScanRequest, sendCurlRequest } from "./slice";
 import env, { saveEnv } from "../../features/env/slice";
 import prefs, { setScanServer, setSecretForSecurity } from "../../features/prefs/slice";
 import { Routes } from "../../features/router/RouterContext";
+import { startNavigationListening } from "../../features/router/listener";
 
 const reducer = {
   theme,
@@ -47,7 +48,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export function createListener(host: Webapp["host"], routes: Routes) {
-  walkRoutes(routes);
+  startNavigationListening(startAppListening, routes);
 
   startAppListening({
     actionCreator: runScan,
@@ -105,21 +106,4 @@ export function createListener(host: Webapp["host"], routes: Routes) {
   });
 
   return listenerMiddleware;
-}
-
-function walkRoutes(routes: Routes, parent: Routes = []) {
-  for (const route of routes) {
-    if (route.when) {
-      startAppListening({
-        actionCreator: route.when,
-        effect: async (action, listenerApi) => {
-          const ids = parent.map((route) => route.id);
-          listenerApi.dispatch(goTo([...ids, route.id]));
-        },
-      });
-    }
-    if (route.children) {
-      walkRoutes(route.children, [...parent, route]);
-    }
-  }
 }
