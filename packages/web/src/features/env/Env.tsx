@@ -12,15 +12,13 @@ import { EnvData } from "@xliic/common/messages/env";
 export default function Env() {
   const data = useFeatureSelector((state) => state.env.data);
 
-  const [activeTab, setActiveTab] = useState("secrets");
+  const [activeTab, setActiveTab] = useState("default");
   const tabs = [
-    /* TODO re-enable default environment when it's supported in scan configs
     {
       id: "default",
       title: "Default",
       secret: false,
     },
-    */
     {
       id: "secrets",
       title: "Secrets",

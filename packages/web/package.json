@@ -9,6 +9,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@xliic/preserving-json-yaml-parser": "^1.10.0",
     "@radix-ui/react-checkbox": "^1.0.0",
     "@radix-ui/react-tabs": "^0.2.0-rc.23",
     "@reduxjs/toolkit": "^1.8.0",

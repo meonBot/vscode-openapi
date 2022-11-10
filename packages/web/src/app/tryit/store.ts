@@ -72,6 +72,16 @@ export function createListener(host: Webapp["host"], routes: Routes) {
   });
 
   startAppListening({
+    actionCreator: saveEnv,
+    effect: async (action, listenerApi) => {
+      host.postMessage({
+        command: "saveEnv",
+        payload: action.payload,
+      });
+    },
+  });
+
+  startAppListening({
     matcher: isAnyOf(setTryitServer, setSecretForSecurity),
     effect: async (action, listenerApi) => {
       const { prefs } = listenerApi.getState();

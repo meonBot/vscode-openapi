@@ -14,6 +14,7 @@ import {
   TryitSecurityValues,
   TryitSecurityValue,
 } from "@xliic/common/messages/tryit";
+import { simpleClone } from "@xliic/preserving-json-yaml-parser";
 
 import { parseHttpsHostname } from "../../util";
 import { EnvData } from "@xliic/common/messages/env";
@@ -48,7 +49,7 @@ export async function makeHttpRequest(
     parameters,
     securities,
     requestContentType: values.body?.mediaType,
-    requestBody: values.body?.value,
+    requestBody: replaceEnvVariables(values.body?.value, env),
   });
 
   const [https, hostname] = parseHttpsHostname(request.url);
@@ -71,6 +72,7 @@ function convertBody(body: unknown): unknown {
   if (typeof body === "string") {
     return body;
   } else if (body instanceof FormData) {
+    // FIXME replace env vars as well
     return Array.from(body.entries());
   }
   return JSON.stringify(body);
@@ -121,4 +123,19 @@ function maybeGetSecret(value: TryitSecurityValue, env: EnvData) {
   }
 
   return value;
+}
+
+function replaceEnvVariables(body: unknown, env: EnvData) {
+  if (typeof body === "string") {
+    return replaceEnv(body, env);
+  } else if (typeof body === "object") {
+    return simpleClone(body, (value) => {
+      if (typeof value === "string") {
+        return replaceEnv(value, env);
+      }
+      return value;
+    });
+  }
+
+  return body;
 }
