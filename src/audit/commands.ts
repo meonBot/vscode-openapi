@@ -169,9 +169,15 @@ async function runAnondAudit(
         "Too many requests. You can run up to 3 security audits per minute, please try again later."
       );
     } else if (e?.response?.statusCode === 403) {
-      vscode.window.showErrorMessage(
-        "Authentication failed. Please paste the token that you received in email to Preferences > Settings > Extensions > OpenAPI > Security Audit Token. If you want to receive a new token instead, clear that setting altogether and initiate a new security audit for one of your OpenAPI files."
-      );
+      if (e?.response?.body?.includes("request validation")) {
+        vscode.window.showErrorMessage(
+          "Failed to submit OpenAPI for security audit. Please check if your file is less than 2Mb in size"
+        );
+      } else {
+        vscode.window.showErrorMessage(
+          "Authentication failed. Please paste the token that you received in email to Preferences > Settings > Extensions > OpenAPI > Security Audit Token. If you want to receive a new token instead, clear that setting altogether and initiate a new security audit for one of your OpenAPI files."
+        );
+      }
     } else {
       vscode.window.showErrorMessage("Unexpected error when trying to audit API: " + e);
     }
