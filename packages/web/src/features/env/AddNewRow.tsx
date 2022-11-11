@@ -9,6 +9,7 @@ export default function AddNewRow({ append }: { append: any }) {
       <Col xs={4}>
         <Form.Control
           type="text"
+          placeholder="name"
           onChange={(e) => {
             append({ key: e.target.value, value: "" }, { shouldFocus: true });
           }}
@@ -16,7 +17,7 @@ export default function AddNewRow({ append }: { append: any }) {
         />
       </Col>
       <Col xs={8}>
-        <Form.Control type="text" value={""} disabled />
+        <Form.Control type="text" value={""} placeholder="value" disabled />
       </Col>
     </Row>
   );

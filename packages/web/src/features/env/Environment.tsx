@@ -25,11 +25,12 @@ export default function EnvironmentForm({
 
   const methods = useForm({
     defaultValues,
+    mode: "onChange",
   });
 
   const {
     handleSubmit,
-    formState: { isDirty },
+    formState: { isDirty, errors },
     control,
     reset,
   } = methods;
@@ -52,6 +53,8 @@ export default function EnvironmentForm({
     name: "values",
   });
 
+  const hasErrors = Object.keys(errors || {}).length > 0;
+
   return (
     <FormProvider {...methods}>
       <Form>
@@ -69,7 +72,7 @@ export default function EnvironmentForm({
         </Value>
       </Form>
       <div className="m-3">
-        <Button onClick={handleSubmit(onSubmit)} disabled={!isDirty}>
+        <Button onClick={handleSubmit(onSubmit)} disabled={!isDirty || hasErrors}>
           Save
         </Button>
       </div>

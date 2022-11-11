@@ -87,5 +87,9 @@ function bootstrapColorOverrides(): string {
     outline-width: medium;
     outline-style: solid;
   }
+
+  #root .form-control::placeholder {
+    opacity: 0.5;
+  }
   `;
 }
