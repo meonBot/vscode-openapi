@@ -14,6 +14,7 @@ import Main from "./components/Main";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+// FIXME better type checking, include payload types
 const requestHandlers: Record<Webapp["request"]["command"], Function> = {
   showFullReport,
   showPartialReport,

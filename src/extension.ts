@@ -31,6 +31,7 @@ import * as tryit from "./tryit/activate";
 import { PlatformStore } from "./platform/stores/platform-store";
 import { Logger } from "./platform/types";
 import { getPlatformCredentials } from "./credentials";
+import { EnvStore } from "./envstore";
 
 export async function activate(context: vscode.ExtensionContext) {
   const versionProperty = "openapiVersion";
@@ -107,12 +108,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const platformStore = new PlatformStore(logger);
 
+  const envStore = new EnvStore(context.workspaceState, context.secrets);
+
   const prefs = {};
 
   const reportWebView = new AuditWebView(context.extensionPath, cache);
   audit.activate(context, auditContext, cache, reportWebView, platformStore);
   preview.activate(context, cache, configuration);
-  tryit.activate(context, cache, configuration, context.workspaceState, context.secrets, prefs);
+  tryit.activate(context, cache, configuration, envStore, prefs);
   await platform.activate(
     context,
     auditContext,
@@ -121,7 +124,7 @@ export async function activate(context: vscode.ExtensionContext) {
     platformStore,
     reportWebView,
     context.workspaceState,
-    context.secrets,
+    envStore,
     prefs
   );
 

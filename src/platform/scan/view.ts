@@ -26,7 +26,7 @@ import { Cache } from "../../cache";
 import { PlatformStore } from "../stores/platform-store";
 import { executeHttpRequestRaw } from "../../tryit/http-handler";
 import { Configuration } from "../../configuration";
-import { loadEnv, saveEnv } from "./env";
+import { EnvStore } from "../../envstore";
 
 export class ScanWebView extends WebView<Webapp> {
   private document?: vscode.TextDocument;
@@ -36,8 +36,7 @@ export class ScanWebView extends WebView<Webapp> {
       try {
         return await runScan(
           this.store,
-          this.memento,
-          this.secret,
+          this.envStore,
           config,
           this.configuration.get<string>("platformConformanceScanImage")
         );
@@ -79,7 +78,7 @@ export class ScanWebView extends WebView<Webapp> {
     },
 
     saveEnv: async (env: NamedEnvironment) => {
-      await saveEnv(this.memento, this.secret, env);
+      await this.envStore.save(env);
     },
 
     savePrefs: async (prefs: Preferences) => {
@@ -92,17 +91,23 @@ export class ScanWebView extends WebView<Webapp> {
     private cache: Cache,
     private configuration: Configuration,
     private store: PlatformStore,
-    private memento: vscode.Memento,
-    private secret: vscode.SecretStorage,
+    private envStore: EnvStore,
     private prefs: Record<string, Preferences>
   ) {
     super(extensionPath, "scan", "Scan", vscode.ViewColumn.Two);
+    envStore.onEnvironmentDidChange((env) => {
+      if (this.isActive()) {
+        this.sendRequest({
+          command: "loadEnv",
+          payload: { default: undefined, secrets: undefined, [env.name]: env.environment },
+        });
+      }
+    });
   }
 
   async sendScanOperation(document: vscode.TextDocument, payload: OasWithOperationAndConfig) {
     this.document = document;
-    const env = await loadEnv(this.memento, this.secret);
-    this.sendRequest({ command: "loadEnv", payload: env });
+    this.sendRequest({ command: "loadEnv", payload: await this.envStore.all() });
     const prefs = this.prefs[this.document.uri.toString()];
     if (prefs) {
       this.sendRequest({ command: "loadPrefs", payload: prefs });
@@ -113,8 +118,7 @@ export class ScanWebView extends WebView<Webapp> {
 
 async function runScan(
   store: PlatformStore,
-  memento: vscode.Memento,
-  secret: vscode.SecretStorage,
+  envStore: EnvStore,
   config: ScanRunConfig,
   scandImage: string
 ): Promise<ShowScanReportMessage> {
@@ -140,11 +144,9 @@ async function runScan(
 
   const terminal = findOrCreateTerminal();
 
-  const envData = await loadEnv(memento, secret);
-
   const env: Record<string, string> = {};
   for (const [name, value] of Object.entries(config.env)) {
-    env[name] = replaceEnv(value, envData);
+    env[name] = replaceEnv(value, await envStore.all());
   }
 
   env["SCAN_TOKEN"] = token;

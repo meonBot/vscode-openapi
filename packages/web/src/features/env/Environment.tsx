@@ -38,9 +38,7 @@ export default function EnvironmentForm({
   useEffect(() => {
     // reset the form, disabling submit button as a side effect
     // if name, data changes typically after Save button was clicked
-    if (isDirty) {
-      reset(wrapEnvironment(data));
-    }
+    reset(wrapEnvironment(data));
   }, [name, data]);
 
   function onSubmit(data: { values: Item[] }) {

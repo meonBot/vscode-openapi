@@ -24,6 +24,7 @@ import { DataDictionaryCompletionProvider } from "./data-dictionary/completion";
 import { DataDictionaryCodeActions } from "./data-dictionary/code-actions";
 import { activate as activateLinter } from "./data-dictionary/linter";
 import { activate as activateScan } from "./scan/activate";
+import { EnvStore } from "../envstore";
 
 export async function activate(
   context: vscode.ExtensionContext,
@@ -33,7 +34,7 @@ export async function activate(
   store: PlatformStore,
   reportWebView: AuditWebView,
   memento: vscode.Memento,
-  secrets: vscode.SecretStorage,
+  envStore: EnvStore,
   prefs: Record<string, Preferences>
 ) {
   const dataDictionaryView = new DataDictionaryWebView(context.extensionPath);
@@ -94,7 +95,7 @@ export async function activate(
     });
   }
 
-  activateScan(context, platformContext, cache, configuration, store, memento, secrets, prefs);
+  activateScan(context, platformContext, cache, configuration, store, envStore, prefs);
   activateLinter(cache, platformContext, store, dataDictionaryDiagnostics);
 
   const disposable1 = vscode.workspace.onDidSaveTextDocument((document) =>

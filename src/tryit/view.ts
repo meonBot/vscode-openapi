@@ -15,9 +15,7 @@ import { WebView, WebViewResponseHandler } from "../web-view";
 import { executeHttpRequest } from "./http-handler";
 import { executeCreateSchemaRequest } from "./create-schema-handler";
 import { Cache } from "../cache";
-
-const ENV_DEFAULT_KEY = "openapi-42crunch.environment-default";
-const ENV_SECRETS_KEY = "openapi-42crunch.environment-secrets";
+import { EnvStore } from "../envstore";
 
 export class TryItWebView extends WebView<Webapp> {
   private document?: vscode.TextDocument;
@@ -32,11 +30,7 @@ export class TryItWebView extends WebView<Webapp> {
         .update("tryit.insecureSslHostnames", config.insecureSslHostnames);
     },
     saveEnv: async (env: NamedEnvironment) => {
-      if (env.name === "default") {
-        this.memento.update(ENV_DEFAULT_KEY, env.environment);
-      } else if (env.name === "secrets") {
-        this.secret.store(ENV_SECRETS_KEY, JSON.stringify(env.environment));
-      }
+      this.envStore.save(env);
     },
     savePrefs: async (prefs: Preferences) => {
       this.prefs[this.document!.uri.toString()] = prefs;
@@ -46,20 +40,23 @@ export class TryItWebView extends WebView<Webapp> {
   constructor(
     extensionPath: string,
     private cache: Cache,
-    private memento: vscode.Memento,
-    private secret: vscode.SecretStorage,
+    private envStore: EnvStore,
     private prefs: Record<string, Preferences>
   ) {
     super(extensionPath, "tryit", "Try It", vscode.ViewColumn.Two);
+    envStore.onEnvironmentDidChange((env) => {
+      if (this.isActive()) {
+        this.sendRequest({
+          command: "loadEnv",
+          payload: { default: undefined, secrets: undefined, [env.name]: env.environment },
+        });
+      }
+    });
   }
 
   async sendTryOperation(document: vscode.TextDocument, payload: OasWithOperation) {
     this.document = document;
-
-    const defaultEnv = this.memento.get(ENV_DEFAULT_KEY, {});
-    const secretsEnv = JSON.parse((await this.secret.get(ENV_SECRETS_KEY)) || "{}");
-    this.sendRequest({ command: "loadEnv", payload: { default: defaultEnv, secrets: secretsEnv } });
-
+    this.sendRequest({ command: "loadEnv", payload: await this.envStore.all() });
     const prefs = this.prefs[this.document.uri.toString()];
     if (prefs) {
       this.sendRequest({ command: "loadPrefs", payload: prefs });

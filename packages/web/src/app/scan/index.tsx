@@ -43,6 +43,7 @@ const routes: Routes = [
   { id: "env", title: "Environment", element: <Env /> },
 ];
 
+// FIXME better type checking, include payload types
 const requestHandlers: Record<Webapp["request"]["command"], Function> = {
   changeTheme,
   scanOperation,

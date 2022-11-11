@@ -5,7 +5,7 @@ export type EnvData = {
   secrets: Environment;
 };
 
-export type ShowEnvMessage = { command: "loadEnv"; payload: EnvData };
+export type ShowEnvMessage = { command: "loadEnv"; payload: Partial<EnvData> };
 type EnvRequest = ShowEnvMessage;
 
 export type SaveEnvMessage = { command: "saveEnv"; payload: NamedEnvironment };

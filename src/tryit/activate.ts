@@ -13,6 +13,7 @@ import { BundledOpenApiSpec } from "@xliic/common/oas30";
 import { TryItWebView } from "./view";
 import { TryItCodelensProvider } from "./lens";
 import { Configuration } from "../configuration";
+import { EnvStore } from "../envstore";
 
 type BundleDocumentVersions = Record<string, number>;
 
@@ -35,8 +36,7 @@ export function activate(
   context: vscode.ExtensionContext,
   cache: Cache,
   configuration: Configuration,
-  memento: vscode.Memento,
-  secret: vscode.SecretStorage,
+  envStore: EnvStore,
   prefs: Record<string, Preferences>
 ) {
   let tryIt: TryIt | null = null;
@@ -64,7 +64,7 @@ export function activate(
 
   const debouncedTryIt = debounce(showTryIt);
 
-  const view = new TryItWebView(context.extensionPath, cache, memento, secret, prefs);
+  const view = new TryItWebView(context.extensionPath, cache, envStore, prefs);
 
   cache.onDidChange(async (document: vscode.TextDocument) => {
     const uri = document.uri.toString();

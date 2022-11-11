@@ -15,11 +15,16 @@ export const slice = createSlice({
   name: "env",
   initialState,
   reducers: {
-    loadEnv: (state, action: PayloadAction<EnvData>) => {
-      state.data = action.payload;
+    loadEnv: (state, action: PayloadAction<Partial<EnvData>>) => {
+      if (action.payload.default) {
+        state.data.default = action.payload.default;
+      }
+      if (action.payload.secrets) {
+        state.data.secrets = action.payload.secrets;
+      }
     },
     saveEnv: (state, action: PayloadAction<NamedEnvironment>) => {
-      state.data[action.payload.name] = action.payload.environment;
+      // hook for a listener, state will be updated after a round trip to the host app
     },
   },
 });
