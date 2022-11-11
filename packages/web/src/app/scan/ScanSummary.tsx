@@ -49,7 +49,7 @@ export default function ScanSummary({
               fill: `var(${ThemeColorVariables.foreground})`,
             }}
           />
-          <div>Successfull: {expected}</div>
+          <div>Successful: {expected}</div>
         </Test>
         <Test>
           <TriangleExclamation
