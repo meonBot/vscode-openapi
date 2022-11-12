@@ -7,9 +7,11 @@ import got, { RequestError } from "got";
 import FormData from "form-data";
 
 import { HttpRequest, HttpResponse } from "@xliic/common/http";
-import { ErrorMessage, TryItRequest } from "@xliic/common/messages/tryit";
+import { ErrorMessage, ShowResponseMessage, ShowErrorMessage } from "@xliic/common/messages/tryit";
 
-export async function executeHttpRequest(payload: HttpRequest): Promise<TryItRequest> {
+export async function executeHttpRequest(
+  payload: HttpRequest
+): Promise<ShowResponseMessage | ShowErrorMessage> {
   try {
     const response = await executeHttpRequestRaw(payload);
     return {

@@ -21,7 +21,7 @@ import { Webapp } from "@xliic/common/webapp/scan";
 
 import { HttpRequest } from "@xliic/common/http";
 
-import { WebView, WebViewResponseHandler } from "../../web-view";
+import { WebView } from "../../web-view";
 import { Cache } from "../../cache";
 import { PlatformStore } from "../stores/platform-store";
 import { executeHttpRequestRaw } from "../../tryit/http-handler";
@@ -31,7 +31,7 @@ import { EnvStore } from "../../envstore";
 export class ScanWebView extends WebView<Webapp> {
   private document?: vscode.TextDocument;
 
-  responseHandlers: WebViewResponseHandler<Webapp> = {
+  responseHandlers: Webapp["responseHandler"] = {
     runScan: async (config: ScanRunConfig): Promise<ShowScanReportMessage> => {
       try {
         return await runScan(

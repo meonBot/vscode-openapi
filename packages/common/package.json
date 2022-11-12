@@ -4,5 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "build": "tsc --project tsconfig.esm.json; tsc --project tsconfig.cjs.json"
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.9.0",
+    "type-fest": "^3.2.0"
   }
 }

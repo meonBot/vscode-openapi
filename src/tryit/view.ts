@@ -11,7 +11,7 @@ import { Preferences } from "@xliic/common/messages/prefs";
 
 import { Webapp } from "@xliic/common/webapp/tryit";
 
-import { WebView, WebViewResponseHandler } from "../web-view";
+import { WebView } from "../web-view";
 import { executeHttpRequest } from "./http-handler";
 import { executeCreateSchemaRequest } from "./create-schema-handler";
 import { Cache } from "../cache";
@@ -19,7 +19,7 @@ import { EnvStore } from "../envstore";
 
 export class TryItWebView extends WebView<Webapp> {
   private document?: vscode.TextDocument;
-  responseHandlers: WebViewResponseHandler<Webapp> = {
+  responseHandlers: Webapp["responseHandler"] = {
     sendRequest: executeHttpRequest,
     createSchema: async (response: any) => {
       executeCreateSchemaRequest(this.document!, this.cache, response);

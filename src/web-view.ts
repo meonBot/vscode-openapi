@@ -5,7 +5,7 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
-import { AbstractWebapp } from "@xliic/common/message";
+import { Message, Webapp } from "@xliic/common/message";
 import {
   VsCodeColorMap,
   ThemeColorName,
@@ -13,14 +13,10 @@ import {
   ThemeColorVariables,
 } from "@xliic/common/theme";
 
-export type WebViewResponseHandler<A extends AbstractWebapp> =
-  | Record<A["response"]["command"], (response: any) => Promise<A["request"] | void>>
-  | { [key: string]: never };
-
-export abstract class WebView<A extends AbstractWebapp> {
+export abstract class WebView<W extends Webapp<Message, Message>> {
   private panel?: vscode.WebviewPanel;
 
-  abstract responseHandlers: WebViewResponseHandler<A>;
+  abstract responseHandlers: W["responseHandler"];
 
   constructor(
     private extensionPath: string,
@@ -33,7 +29,7 @@ export abstract class WebView<A extends AbstractWebapp> {
     return this.panel !== undefined;
   }
 
-  protected async sendRequest(request: A["request"]): Promise<void> {
+  protected async sendRequest(request: W["request"]): Promise<void> {
     if (this.panel) {
       await this.panel!.webview.postMessage(request);
     } else {
@@ -41,8 +37,8 @@ export abstract class WebView<A extends AbstractWebapp> {
     }
   }
 
-  async handleResponse(response: A["response"]): Promise<void> {
-    const handler = this.responseHandlers[response.command as A["response"]["command"]];
+  async handleResponse(response: W["response"]): Promise<void> {
+    const handler = this.responseHandlers[response.command as W["response"]["command"]];
 
     if (handler) {
       const request = await handler(response.payload);
@@ -61,7 +57,7 @@ export abstract class WebView<A extends AbstractWebapp> {
       const panel = await this.createPanel();
       panel.onDidDispose(() => (this.panel = undefined));
       panel.webview.onDidReceiveMessage(async (message) => {
-        this.handleResponse(message as A["response"]);
+        this.handleResponse(message as W["response"]);
       });
       this.panel = panel;
     } else if (!this.panel.visible) {

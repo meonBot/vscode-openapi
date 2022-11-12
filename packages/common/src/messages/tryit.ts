@@ -46,8 +46,8 @@ export type TryitSecurity = Record<string, OasSecurityScheme>[];
 
 // vs code to webapp requests
 type TryOperationMessage = { command: "tryOperation"; payload: OasWithOperation };
-type ShowResponseMessage = { command: "showResponse"; payload: HttpResponse };
-type ShowErrorMessage = { command: "showError"; payload: ErrorMessage };
+export type ShowResponseMessage = { command: "showResponse"; payload: HttpResponse };
+export type ShowErrorMessage = { command: "showError"; payload: ErrorMessage };
 
 export type TryItRequest = TryOperationMessage | ShowResponseMessage | ShowErrorMessage;
 

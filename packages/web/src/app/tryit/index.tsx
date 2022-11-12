@@ -35,7 +35,7 @@ const routes: Routes = [
   { id: "env", title: "Environment", element: <Env /> },
 ];
 
-const requestHandlers: Record<Webapp["request"]["command"], Function> = {
+const requestHandlers: Webapp["requestHandler"] = {
   changeTheme,
   tryOperation,
   showResponse,
@@ -72,7 +72,7 @@ function renderWebView(host: Webapp["host"], theme: ThemeState) {
     if (command) {
       const handler = requestHandlers[command];
       if (handler) {
-        store.dispatch(handler(payload));
+        store.dispatch(handler(payload as any));
       } else {
         console.error(`Unable to find handler for command: ${command}`);
       }

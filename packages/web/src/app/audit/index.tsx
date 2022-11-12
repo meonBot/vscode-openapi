@@ -14,8 +14,7 @@ import Main from "./components/Main";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// FIXME better type checking, include payload types
-const requestHandlers: Record<Webapp["request"]["command"], Function> = {
+const requestHandlers: Webapp["requestHandler"] = {
   showFullReport,
   showPartialReport,
   showNoReport,
@@ -48,7 +47,7 @@ function renderWebView(host: Webapp["host"], theme: ThemeState) {
     if (command) {
       const handler = requestHandlers[command];
       if (handler) {
-        store.dispatch(handler(payload));
+        store.dispatch(handler(payload as any));
       } else {
         console.error(`Unable to find handler for command: ${command}`);
       }
