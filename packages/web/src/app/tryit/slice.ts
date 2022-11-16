@@ -61,29 +61,35 @@ export const slice = createSlice({
   reducers: {
     tryOperation: (state, action: PayloadAction<OasWithOperation>) => {
       const { oas, path, method, preferredMediaType, preferredBodyValue, config } = action.payload;
-      state.oas = oas;
-      state.path = path;
-      state.method = method;
-      // excersise a bit of caution, config is user-editable, let's make sure it has all expected values
-      state.tryitConfig.insecureSslHostnames = config?.insecureSslHostnames || [];
+      try {
+        const operation = getOperation(oas, path, method);
+        // parameters
+        const parameters = getParameters(oas, path, method);
+        const parameterValues = generateParameterValues(oas, parameters);
+        // security
+        const security = getSecurity(oas, path, method);
+        const securityValues = generateSecurityValues(security);
+        // body
+        const body = createDefaultBody(oas, operation, preferredMediaType, preferredBodyValue);
 
-      const operation = getOperation(oas, path, method);
-      // parameters
-      const parameters = getParameters(oas, path, method);
-      const parameterValues = generateParameterValues(oas, parameters);
-      // security
-      const security = getSecurity(oas, path, method);
-      const securityValues = generateSecurityValues(security);
-      // body
-      const body = createDefaultBody(oas, operation, preferredMediaType, preferredBodyValue);
+        state.oas = oas;
+        state.path = path;
+        state.method = method;
 
-      state.defaultValues = {
-        server: oas.servers?.[0]?.url || "",
-        parameters: parameterValues,
-        security: securityValues,
-        securityIndex: 0,
-        body,
-      };
+        // excersise a bit of caution, config is user-editable, let's make sure it has all expected values
+        state.tryitConfig.insecureSslHostnames = config?.insecureSslHostnames || [];
+
+        state.defaultValues = {
+          server: oas.servers?.[0]?.url || "",
+          parameters: parameterValues,
+          security: securityValues,
+          securityIndex: 0,
+          body,
+        };
+      } catch (e) {
+        // TODO show error messages, 'failed to update/render UI because of:...'
+        console.log("exception occured", e);
+      }
     },
 
     showResponse: (state, action: PayloadAction<HttpResponse>) => {
