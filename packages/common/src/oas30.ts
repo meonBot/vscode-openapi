@@ -143,7 +143,7 @@ export interface OasResponses {
 }
 
 export interface OasResponse {
-  description?: string;
+  description: string;
   headers?: { [name: string]: RefOr<OasHeader> };
   content?: { [mime: string]: OasMediaType };
   links?: { [name: string]: RefOr<OasLink> };
@@ -168,10 +168,10 @@ export interface OasLink {
 export interface OasSecurityScheme {
   type: "apiKey" | "http" | "oauth2" | "openIdConnect";
   description?: string;
-  name?: string;
-  in?: "query" | "header" | "cookie";
+  name: string;
+  in: "query" | "header" | "cookie";
   scheme: string;
-  bearerFormat: string;
+  bearerFormat?: string;
   flows: {
     implicit?: {
       refreshUrl?: string;
