@@ -1421,8 +1421,11 @@
             "description": "Describe the type of injection done for a specific request. Can be used only in the scenarios.json file under the customTests properties"
         },
         "expectedResponse": {
-            "type": "string",
-            "description": "Reference to a response defined in the 'responses' map and ignore the one specified in the defaultResponse"
+            "description": "Reference to one or more responses defined in the 'responses' map, any of which is accepted as the outcome for this step. A single string names one response (legacy form); an array names several equally-acceptable responses. Overrides 'defaultResponse' when present.",
+            "oneOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true }
+            ]
         },
         "fuzzing": {
             "type": "boolean",
