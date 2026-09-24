@@ -709,7 +709,7 @@ function parseExpectedResponse(
     return [undefined, undefined];
   }
   if (Array.isArray(input)) {
-    return [input, undefined];
+    return [input.length > 0 ? input : undefined, undefined];
   }
   return [[input], undefined];
 }

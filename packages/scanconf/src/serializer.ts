@@ -211,7 +211,7 @@ function serializeStageReference(
     fuzzing: stage.fuzzing,
     $ref: ref,
     auth: serializeAuth(stage.auth),
-    expectedResponse: stage.expectedResponse,
+    expectedResponse: serializeExpectedResponse(stage.expectedResponse),
     environment: serializeEnvironment(stage.environment),
     responses,
   };
@@ -271,6 +271,13 @@ function serializeExternalStageContent(
   };
 
   return [result, undefined];
+}
+
+function serializeExpectedResponse(expectedResponse: string[] | undefined) {
+  if (expectedResponse === undefined || expectedResponse.length === 0) {
+    return undefined;
+  }
+  return expectedResponse;
 }
 
 function serializeAuth(auth: string[] | undefined) {
