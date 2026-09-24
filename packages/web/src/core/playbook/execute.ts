@@ -211,27 +211,31 @@ async function* executePlaybook(
     yield { event: "http-response-received", response };
 
     if (response !== MockHttpResponse) {
-      if (step.expectedResponse !== undefined) {
-        if (
-          String(response?.statusCode) !== step.expectedResponse &&
-          getHttpResponseRange(response!.statusCode) !== step.expectedResponse &&
-          request.defaultResponse !== "default"
-        ) {
+      const statusCode = String(response!.statusCode);
+      const statusCodeRange = getHttpResponseRange(response!.statusCode);
+      if (step.expectedResponse !== undefined && step.expectedResponse.length > 0) {
+        // any of the expected responses is accepted as the outcome of this step
+        const matches = step.expectedResponse.some(
+          (expected) => expected === statusCode || expected === statusCodeRange
+        );
+        if (!matches && request.defaultResponse !== "default") {
           yield {
             event: "response-processing-error",
-            error: `HTTP response code "${response?.statusCode}" does not match expected stage response code "${step.expectedResponse}"`,
+            error: `HTTP response code "${statusCode}" does not match expected stage response ${
+              step.expectedResponse.length === 1 ? "code" : "codes"
+            } "${step.expectedResponse.join(", ")}"`,
           };
           return;
         }
       } else {
         if (
-          String(response?.statusCode) !== request.defaultResponse &&
-          getHttpResponseRange(response!.statusCode) !== request.defaultResponse &&
+          statusCode !== request.defaultResponse &&
+          statusCodeRange !== request.defaultResponse &&
           request.defaultResponse !== "default"
         ) {
           yield {
             event: "response-processing-error",
-            error: `HTTP response code "${response?.statusCode}" does not match default response code "${request.defaultResponse}"`,
+            error: `HTTP response code "${statusCode}" does not match default response code "${request.defaultResponse}"`,
           };
           return;
         }
