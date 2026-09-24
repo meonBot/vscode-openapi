@@ -161,7 +161,7 @@ async function showPreview(
 
 function buildWebviewPanel(
   context: vscode.ExtensionContext,
-  name: string,
+  name: PreviewType,
   title: string,
 ): Promise<vscode.WebviewPanel> {
   const panel = vscode.window.createWebviewPanel(
@@ -198,15 +198,20 @@ function buildWebviewPanel(
       ),
     );
 
-    panel.webview.html = getWebviewContent(panel.webview, index, style);
+    panel.webview.html = getWebviewContent(panel.webview, name, index, style);
   });
 }
 
 // Directive connect-src must be set to allow XHR
-function getWebviewContent(webview: vscode.Webview, index: vscode.Uri, style: vscode.Uri) {
+function getWebviewContent(
+  webview: vscode.Webview,
+  name: PreviewType,
+  index: vscode.Uri,
+  style: vscode.Uri,
+) {
   const themeKind: ChangeThemeMessage["payload"]["kind"] =
     kinds[vscode.window.activeColorTheme.kind];
-  const htmlClasses = themeKind === "dark" || themeKind === "highContrast" ? "dark-mode" : "";
+  const htmlClasses = shouldUseDarkMode(name, themeKind) ? "dark-mode" : "";
 
   return `<!DOCTYPE html>
   <html lang="en" class="${htmlClasses}">
@@ -229,4 +234,13 @@ function getWebviewContent(webview: vscode.Webview, index: vscode.Uri, style: vs
   <script type="module" src="${index}"></script>
   </body>
   </html>`;
+}
+
+// Only SwaggerUI has dark mode styles; ReDoc keeps its light theme colors whatever the editor
+// theme is, so a dark background leaves its text unreadable.
+export function shouldUseDarkMode(
+  name: PreviewType,
+  themeKind: ChangeThemeMessage["payload"]["kind"],
+): boolean {
+  return name === "swaggerui" && (themeKind === "dark" || themeKind === "highContrast");
 }
