@@ -18,7 +18,7 @@ import Environment from "../components/environment/Environment";
 import { OperationResult } from "../components/scenario/types";
 import { unwrapPlaybookStage, wrapPlaybookStage } from "../components/scenario/util";
 import CollapsibleCard from "../../../new-components/CollapsibleCard";
-import DownshiftSelect from "../../../new-components/fields/DownshiftSelect";
+import DownshiftMultiSelect from "../../../new-components/fields/DownshiftMultiSelect";
 import VariableUsed from "../components/scenario/VariableUsed";
 
 export default function Stage({
@@ -119,7 +119,7 @@ export default function Stage({
                 )}
                 <ExpectedResponse>
                   <span>Expected Response</span>
-                  <DownshiftSelect
+                  <DownshiftMultiSelect
                     name="expectedResponse"
                     options={responseCodeOptions}
                     placeholder={defaultResponseCode}
@@ -274,7 +274,7 @@ const ExpectedResponse = styled.div`
   gap: 4px;
   align-items: center;
   > div {
-    width: 60px;
+    width: 120px;
     border: 1px solid var(${ThemeColorVariables.border});
   }
 `;

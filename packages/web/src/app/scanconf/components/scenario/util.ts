@@ -92,7 +92,7 @@ export function wrapPlaybookStage(stage: Playbook.StageReference): Record<string
   return {
     ...stage,
     fuzzing: stage.fuzzing === true,
-    expectedResponse: stage.expectedResponse !== undefined ? stage.expectedResponse : "",
+    expectedResponse: stage.expectedResponse !== undefined ? stage.expectedResponse : [],
     environment: wrapEnvironment(stage.environment),
     responses: wrapResponses(stage.responses),
   };
@@ -102,7 +102,10 @@ export function unwrapPlaybookStage(stage: FieldValues): Playbook.StageReference
   return {
     ...stage,
     fuzzing: stage.fuzzing === true ? true : undefined,
-    expectedResponse: stage.expectedResponse !== "" ? stage.expectedResponse : undefined,
+    expectedResponse:
+      Array.isArray(stage.expectedResponse) && stage.expectedResponse.length > 0
+        ? stage.expectedResponse
+        : undefined,
     environment: unwrapEnvironment(stage.environment),
     responses: unwrapResponses(stage.responses),
   } as Playbook.StageReference;
