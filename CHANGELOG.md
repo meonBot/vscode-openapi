@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 5.10.0 (September 30, 2026)
+
+- Add support for multiple expected result values in Scan configuration
+- Fix ReDoc preview when using the dark theme (contributed by @tillig)
 
 ## Version 5.9.0 (August 20, 2026)
 
